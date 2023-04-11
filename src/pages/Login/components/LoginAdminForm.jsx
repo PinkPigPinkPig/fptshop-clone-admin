@@ -6,22 +6,28 @@ import {
   InputAdornment,
   InputLabel,
   TextField,
+  Typography,
 } from "@mui/material"
 import React, { useState } from "react"
+import { useDispatch } from "react-redux"
 import { useNavigate } from "react-router-dom"
+import { toast } from "react-toastify"
 import { ReactComponent as HomepageLogo } from "../../../assets/icon/homepage-logo.svg"
 import { ROUTE_PATH } from "../../../constant/routes.const"
 import { LOCAL_STORE } from "../../../constant/system.const"
 import { localStorageHelper } from "../../../helpers"
+import { AuthActions } from "../../../ReduxSaga/Auth/AuthRedux"
 import '../Login.scss'
 
 const LoginAdminForm = () => {
+  const dispatch = useDispatch()
   const [values, setValues] = useState({
     username: "",
     password: "",
   })
+  const [isWrong, setIsWrong] =useState(false)
 
-  const disabledLogin = (!values.password || !values.username) && false
+  const disabledLogin = (!values.password || !values.username)
 
   let navigate = useNavigate();
 
@@ -29,10 +35,20 @@ const LoginAdminForm = () => {
     setValues({ ...values, [prop]: event.target.value.trim() })
   }
 
-  const handleLogin = () => {
-    localStorageHelper.setItem(LOCAL_STORE.TOKEN, {token: 'string'})
-    navigate(ROUTE_PATH.HOME)
+  const loginCallback = (isSuccess) => {
+    if(isSuccess) {
+      setIsWrong(false)
+      navigate(ROUTE_PATH.HOME)
+    } else {
+      setIsWrong(true)
+    }
   }
+
+  const handleLogin = () => {
+    dispatch(AuthActions.loginRequest({data: values, callback: loginCallback}))
+  };
+
+  
 
   const onKeyDownEnter = (event) => {
     if (event.key === "Enter") {
@@ -98,12 +114,9 @@ const LoginAdminForm = () => {
                     }}
                   />
                 </Box>
-                {/* <div className="login-form__remember">
-                  <FormControlLabel
-                    control={<Checkbox onChange={onChangeRememberMe} value={rememberMe} />}
-                    label="Duy trì đăng nhập"
-                  />
-                </div> */}
+                <div className="login-form__remember">
+                  {isWrong && <Typography color={'red'}>Sai tài khoản hoặc mật khẩu</Typography>}
+                </div>
               </div>
               <Button
                 onClick={handleLogin}

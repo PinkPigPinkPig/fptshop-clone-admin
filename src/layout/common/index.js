@@ -17,15 +17,17 @@ import { MenuItem } from "./MenuItem"
 import "./layout.scss"
 import { FlexCol } from "../../components/Layout/Layout"
 import { listSidebarItems } from "../../constant/sidebarItem.const"
+import { useLocation, useNavigate } from "react-router-dom"
 
 export const CommonLayout = ({ children }) => {
   const handleSearchMenu = (event) => {
     // dispatch(setListMenu(event.target.value.trim()))
   }
+  const { pathname } = useLocation();
+  const navigate = useNavigate()
   const user = {}
-  // const listSidebarItems = []
-  const handleClick = () => {
-    
+  const handleClick = (item) => {
+    navigate(item?.path)
   }
   return (
     <div className='wrap-layout'>

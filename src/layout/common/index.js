@@ -1,4 +1,4 @@
-import React, { useLayoutEffect } from "react"
+import React, { useLayoutEffect, useState } from "react"
 import SearchIcon from "@mui/icons-material/Search"
 import Breadcrumb from "../Breadcrumb"
 import { Footer } from "../Footer/Footer"
@@ -23,11 +23,14 @@ export const CommonLayout = ({ children }) => {
   const handleSearchMenu = (event) => {
     // dispatch(setListMenu(event.target.value.trim()))
   }
-  const { pathname } = useLocation();
+  const { pathname } = useLocation()
   const navigate = useNavigate()
+  const [currentId, setCurrentId] = useState()
   const user = {}
-  const handleClick = (item) => {
-    navigate(item?.path)
+
+  const handleClick = (parent, item) => {
+    setCurrentId(parent.id)
+    navigate(parent.path)
   }
   return (
     <div className='wrap-layout'>
@@ -93,6 +96,7 @@ export const CommonLayout = ({ children }) => {
                     {listSidebarItems.map((item) => {
                       return (
                         <MenuItem
+                          currentId={currentId}
                           item={item}
                           key={item.title}
                           onClick={handleClick}

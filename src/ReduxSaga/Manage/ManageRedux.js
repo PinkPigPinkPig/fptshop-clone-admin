@@ -5,7 +5,9 @@ const initialState = {}
 const manageRedux = createSlice({
     name: 'manageRedux',
     initialState,
-    reducers: {}
+    reducers: {
+        getAllCateRequest: (state, action) => {}
+    }
 })
 
 export const ManageActions = manageRedux.actions

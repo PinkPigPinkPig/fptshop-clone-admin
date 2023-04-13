@@ -4,6 +4,9 @@ import { ROUTE_PATH } from '../constant/routes.const'
 const Home = React.lazy(() => import('../pages/Home/Home'))
 const Login = React.lazy(() => import('../pages/Login/Login'))
 const ManageProduct = React.lazy(() => import('../pages/Manage-Product'))
+const ManageAccount = React.lazy(() => import('../pages/Manage-Account'))
+const ManageUser = React.lazy(() => import('../pages/Manage-User'))
+const ManageOrder = React.lazy(() => import('../pages/Manage-Order'))
 
 export const routesList = [
     {
@@ -27,6 +30,21 @@ export const commonLayoutRoutesList = [
     {
         component: ManageProduct,
         path: ROUTE_PATH.MANAGE_PRODUCT,
+        isProtected: true,
+    },
+    {
+        component: ManageAccount,
+        path: ROUTE_PATH.MANAGE_ACCOUNT,
+        isProtected: true,
+    },
+    {
+        component: ManageUser,
+        path: ROUTE_PATH.MANAGE_USER,
+        isProtected: true,
+    },
+    {
+        component: ManageOrder,
+        path: ROUTE_PATH.MANAGE_ORDER,
         isProtected: true,
     },
 ]

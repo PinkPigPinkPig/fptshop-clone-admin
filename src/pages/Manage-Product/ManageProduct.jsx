@@ -1,8 +1,63 @@
-import React from 'react'
+import { Box, Button, FormControl, Grid, InputLabel, MenuItem, Select, Stack } from "@mui/material"
+import { DataGrid } from "@mui/x-data-grid"
+import React, { useEffect, useState } from "react"
+import { useDispatch } from "react-redux"
+import { ManageActions } from "../../ReduxSaga/Manage/ManageRedux"
+import { fakeData, TABLE_COLUMNS } from "./config"
 
 const ManageProduct = () => {
+  const dispatch = useDispatch()
+  const [category, setCategory] = useState("")
+  const [categoryList, setCategoryList] = useState([])
+
+  // useEffect(() => {
+  //   dispatch(
+  //     ManageActions.getAllCateRequest({
+  //       callback: (res) => setCategoryList(res),
+  //     })
+  //   )
+  // }, [])
+
+  const handleChange = (event) => {
+    setCategory(event.target.value)
+  }
   return (
-    <div>ManageProduct</div>
+    <Box sx={{backgroundColor: '#fff', padding: 3, borderRadius: 3}}>
+      <Stack>
+        <Box sx={{ width: 200, marginBottom: 10 }}>
+          <FormControl fullWidth>
+            <InputLabel id='category-select-label'>Select Category</InputLabel>
+            <Select
+              labelId='category-select-label'
+              value={category}
+              label='Select Category'
+              onChange={handleChange}
+            >
+              {categoryList.map((item, index) => {
+                return (
+                  <MenuItem key={item?.id} value={item?.id}>
+                    {item?.categoryName}
+                  </MenuItem>
+                )
+              })}
+            </Select>
+          </FormControl>
+        </Box>
+        <Button></Button>
+      </Stack>
+      <Box>
+        <DataGrid
+          rows={fakeData}
+          columns={TABLE_COLUMNS}
+          pageSize={5}
+          rowsPerPageOptions={[5]}
+          autoHeight
+          disableColumnFilter
+          disableColumnMenu
+          disableColumnSelector
+        />
+      </Box>
+    </Box>
   )
 }
 

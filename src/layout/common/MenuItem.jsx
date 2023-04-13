@@ -39,12 +39,11 @@ const HeadItem = ({ onClick, item, isActive, ...props }) => {
   );
 };
 
-export const MenuItem = ({ item, parent, onClick, level = 0 }) => {
+export const MenuItem = ({ item, parent, onClick, currentId, level = 0 }) => {
   const isParent = Boolean(item.subItems);
   // const { activeChildId, activeParentId } = useAppSelector((state) => state.sidebar);
-  const isActive = false
-  // isParent ? item.id === activeParentId : item.id === activeChildId;
-
+  const isActive = item.id === currentId
+  
   return (
     <>
       {isParent && <HeadItem item={item} onClick={onClick} isActive={isActive} />}

@@ -6,4 +6,5 @@ export default {
     ADD_PRODUCT: '',
     EDIT_PRODUCT: '',
     DELETE_PRODUCT: '',
+    GET_ALL_CATEGORY: '/api/v1/selling/get-all-category',
 }

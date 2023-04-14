@@ -7,4 +7,5 @@ export default {
     EDIT_PRODUCT: '',
     DELETE_PRODUCT: '',
     GET_ALL_CATEGORY: '/api/v1/selling/get-all-category',
+    GET_PRODUCT_BY_CATEGORY: '/api/v1/selling/get-product-by-category'
 }

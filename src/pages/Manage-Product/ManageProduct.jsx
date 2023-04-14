@@ -9,14 +9,28 @@ const ManageProduct = () => {
   const dispatch = useDispatch()
   const [category, setCategory] = useState("")
   const [categoryList, setCategoryList] = useState([])
+  const [productList, setProductList] = useState([])
 
-  // useEffect(() => {
-  //   dispatch(
-  //     ManageActions.getAllCateRequest({
-  //       callback: (res) => setCategoryList(res),
-  //     })
-  //   )
-  // }, [])
+  useEffect(() => {
+    dispatch(
+      ManageActions.getAllCateRequest({
+        callback: (res) => setCategoryList(res),
+      })
+    )
+  }, [])
+
+  useEffect(() => {
+    if(category) {
+      dispatch(ManageActions.getProductByCategoryRequest({
+        params: {
+          categoryId: category,
+        },
+        callback: (res) => setProductList(res?.content) 
+      }))
+    }
+  }, [category])
+
+  console.log('productList', productList)
 
   const handleChange = (event) => {
     setCategory(event.target.value)
@@ -47,7 +61,7 @@ const ManageProduct = () => {
       </Stack>
       <Box>
         <DataGrid
-          rows={fakeData}
+          rows={productList}
           columns={TABLE_COLUMNS}
           pageSize={5}
           rowsPerPageOptions={[5]}

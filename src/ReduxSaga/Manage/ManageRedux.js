@@ -6,7 +6,8 @@ const manageRedux = createSlice({
     name: 'manageRedux',
     initialState,
     reducers: {
-        getAllCateRequest: (state, action) => {}
+        getAllCateRequest: (state, action) => {},
+        getProductByCategoryRequest: (state, action) => {},
     }
 })
 

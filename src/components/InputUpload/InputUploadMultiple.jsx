@@ -5,7 +5,7 @@ import React from 'react';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import { toast } from 'react-toastify';
 import { isFileAccepted, isFileSizeValid } from './utils';
-import { TextHelper } from 'components/Layout/Layout';
+// import { TextHelper } from 'components/Layout/Layout';
 import { TextHelperError } from './InputUploadSingle';
 
 const FileItemContainer = styled('div')({

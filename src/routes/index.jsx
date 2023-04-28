@@ -4,11 +4,7 @@ import { CommonLayout } from "../layout/common"
 import { commonLayoutRoutesList, routesList } from "./config"
 
 function PrivateOutlet() {
-  return localStorageHelper.isLogin() ? (
-    <Outlet />
-  ) : (
-    <Navigate to='/admin/login' />
-  )
+  return localStorageHelper.isLogin() ? <Outlet /> : <Navigate to='/login' />
 }
 export const AppRoutes = () => {
   return (
@@ -36,7 +32,17 @@ export const AppRoutes = () => {
               <Route path='' element={<Component />} />
             </Route>
           )
-        return <Route key={i} path={path} element={<Component />} />
+        return (
+          <Route
+            key={i}
+            path={path}
+            element={
+              <CommonLayout>
+                <Component />
+              </CommonLayout>
+            }
+          />
+        )
       })}
     </Routes>
   )

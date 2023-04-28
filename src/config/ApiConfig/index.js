@@ -1,4 +1,3 @@
-/* eslint-disable import/no-anonymous-default-export */
 export default {
     //API end point
     SIGN_UP: '/api/v1/auth/login',

@@ -1,15 +1,28 @@
-import { Box, Button, FormControl, Grid, InputLabel, MenuItem, Select, Stack } from "@mui/material"
+import {
+  Box,
+  Button,
+  FormControl,
+  Grid,
+  InputLabel,
+  MenuItem,
+  Select,
+  Stack,
+} from "@mui/material"
 import { DataGrid } from "@mui/x-data-grid"
 import React, { useEffect, useState } from "react"
 import { useDispatch } from "react-redux"
 import { ManageActions } from "../../ReduxSaga/Manage/ManageRedux"
 import { fakeData, TABLE_COLUMNS } from "./config"
+import { useNavigate } from "react-router-dom"
+import { ROUTE_PATH } from "../../constant/routes.const"
 
 const ManageProduct = () => {
   const dispatch = useDispatch()
   const [category, setCategory] = useState("")
   const [categoryList, setCategoryList] = useState([])
   const [productList, setProductList] = useState([])
+
+  const navigate = useNavigate()
 
   useEffect(() => {
     dispatch(
@@ -20,24 +33,31 @@ const ManageProduct = () => {
   }, [])
 
   useEffect(() => {
-    if(category) {
-      dispatch(ManageActions.getProductByCategoryRequest({
-        params: {
-          categoryId: category,
-        },
-        callback: (res) => setProductList(res?.content) 
-      }))
+    if (category) {
+      dispatch(
+        ManageActions.getProductByCategoryRequest({
+          params: {
+            categoryId: category,
+          },
+          callback: (res) => setProductList(res?.content),
+        })
+      )
     }
   }, [category])
 
-  console.log('productList', productList)
+  console.log("productList", productList)
 
   const handleChange = (event) => {
     setCategory(event.target.value)
   }
+
+  const handleClickCreate = () => {
+    navigate(ROUTE_PATH.CREATE_PRODUCT)
+  }
+
   return (
-    <Box sx={{backgroundColor: '#fff', padding: 3, borderRadius: 3}}>
-      <Stack>
+    <Box sx={{ backgroundColor: "#fff", padding: 3, borderRadius: 3 }}>
+      <Stack direction='row' justifyContent='space-between'>
         <Box sx={{ width: 200, marginBottom: 10 }}>
           <FormControl fullWidth>
             <InputLabel id='category-select-label'>Select Category</InputLabel>
@@ -57,7 +77,9 @@ const ManageProduct = () => {
             </Select>
           </FormControl>
         </Box>
-        <Button></Button>
+        <Box>
+          <Button size="large" variant='contained' onClick={handleClickCreate}>Tạo mới</Button>
+        </Box>
       </Stack>
       <Box>
         <DataGrid

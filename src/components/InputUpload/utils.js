@@ -1,5 +1,5 @@
+import { IMAGE_ACCEPT } from 'constant/system.const';
 import { MegaByteToByte } from 'helpers';
-import { IMAGE_ACCEPT } from 'consts';
 import { isEmpty } from 'lodash';
 
 export const isFileSizeValid = (file, maxSize) => {

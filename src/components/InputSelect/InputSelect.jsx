@@ -1,14 +1,15 @@
-import { FormControl, FormHelperText, Select } from '@mui/material';
+import { FormControl, FormHelperText, InputLabel, Select } from '@mui/material';
 import React from 'react';
 import { Controller } from 'react-hook-form';
 
-export const InputSelect = ({ name, control, errorMes, children, ...selectProps }) => {
+export const InputSelect = ({ name, control, errorMes, label, children, size="small", ...selectProps  }) => {
   return (
     <Controller
       name={name}
       render={({ field }) => (
         <FormControl error={!!errorMes}>
-          <Select {...field} value={field.value || ''} {...selectProps}>
+          {/* <InputLabel>{label}</InputLabel> */}
+          <Select size={size} {...field} value={field.value || ''} {...selectProps}>
             {children}
           </Select>
           <FormHelperText>{errorMes}</FormHelperText>

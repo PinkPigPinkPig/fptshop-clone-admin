@@ -18,6 +18,10 @@ export const Flex = styled(Box)({
 export const FlexRow = styled(Flex)({
   flexDirection: 'row'
 });
+export const FlexBetween = styled(Flex)({
+  flexDirection: 'row',
+  justifyContent: 'space-between'
+});
 export const FlexCol = styled(Flex)({
   flexDirection: 'column'
 });

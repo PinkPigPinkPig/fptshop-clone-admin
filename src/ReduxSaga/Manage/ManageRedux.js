@@ -8,6 +8,9 @@ const manageRedux = createSlice({
     reducers: {
         getAllCateRequest: (state, action) => {},
         getProductByCategoryRequest: (state, action) => {},
+        getBrandByCategoryRequest: (state, action) => {},
+        getImageLinkRequest: (state, action) => {},
+        saveFileRequest: (state, action) => {},
     }
 })
 

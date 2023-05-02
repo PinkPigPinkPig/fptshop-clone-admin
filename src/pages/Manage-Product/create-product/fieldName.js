@@ -1,4 +1,5 @@
 export const PRODUCT_FIELD_NAME = {
+    ID: 'id',
     PRODUCT_NAME: 'productName',
     PRODUCT_CODE: 'productCode',
     MODEL_SERIES: 'modelSeries',
@@ -15,9 +16,12 @@ export const PRODUCT_FIELD_NAME = {
         CORE: 'core',
         CPU_CLOCK: 'cpuClock',
         RAM: 'ram',
+        ROM: 'rom',
         SCREEN_SIZE: 'screenSize',
         SCREEN_TECH: 'screenTech',
         RESOLUTION: 'resolution',
+        STANDARD_SCREEN: 'standardScreen',
+        FREQUENCY_SCREEN: 'frequencyScreen',
         CAMERAS: {
             CAMERA_TYPE: 'cameraType',
             CAMERA_LABEL: 'cameraLabel',

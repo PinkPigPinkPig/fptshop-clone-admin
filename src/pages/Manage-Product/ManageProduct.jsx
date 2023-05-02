@@ -15,12 +15,13 @@ import { ManageActions } from "../../ReduxSaga/Manage/ManageRedux"
 import { fakeData, TABLE_COLUMNS } from "./config"
 import { useNavigate } from "react-router-dom"
 import { ROUTE_PATH } from "../../constant/routes.const"
+import { isNil } from "lodash"
 
 const ManageProduct = () => {
   const dispatch = useDispatch()
   const [category, setCategory] = useState("")
   const [categoryList, setCategoryList] = useState([])
-  const [productList, setProductList] = useState([])
+  const [productList, setProductList] = useState(fakeData)
 
   const navigate = useNavigate()
 
@@ -46,13 +47,18 @@ const ManageProduct = () => {
   }, [category])
 
   console.log("productList", productList)
+  console.log({category})
 
   const handleChange = (event) => {
     setCategory(event.target.value)
   }
 
   const handleClickCreate = () => {
-    navigate(ROUTE_PATH.CREATE_PRODUCT)
+    navigate(ROUTE_PATH.CREATE_PRODUCT, {
+      state: {
+        categoryId: category,
+      },
+    })
   }
 
   return (
@@ -78,7 +84,14 @@ const ManageProduct = () => {
           </FormControl>
         </Box>
         <Box>
-          <Button size="large" variant='contained' onClick={handleClickCreate}>Tạo mới</Button>
+          <Button
+            size='large'
+            disabled={!category}
+            variant='contained'
+            onClick={handleClickCreate}
+          >
+            Tạo mới
+          </Button>
         </Box>
       </Stack>
       <Box>
@@ -91,6 +104,7 @@ const ManageProduct = () => {
           disableColumnFilter
           disableColumnMenu
           disableColumnSelector
+          // getRowId
         />
       </Box>
     </Box>

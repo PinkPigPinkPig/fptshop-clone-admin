@@ -1,8 +1,11 @@
-import React from 'react'
+import { Box } from "@mui/material"
+import React from "react"
 
 const ManageOrder = () => {
   return (
-    <div>ManageOrder</div>
+    <Box sx={{ backgroundColor: "#fff", padding: 3, borderRadius: 3 }}>
+      <div>ManageOrder</div>
+    </Box>
   )
 }
 

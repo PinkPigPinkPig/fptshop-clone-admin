@@ -19,7 +19,7 @@ class ApiUtil {
       config.headers["Accept"] = "application/json"
 
       const token = localStorageHelper.getItem(LOCAL_STORE.TOKEN)
-      const isAuthorize = false
+      const isAuthorize = localStorageHelper?.isLogin()
       if(token && isAuthorize) {
         config.headers['Authorization'] = `Bearer ${token}`
       }

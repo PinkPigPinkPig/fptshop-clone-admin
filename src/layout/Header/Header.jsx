@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { ReactComponent as HomepageLogo } from '../../assets/icon/homepage-logo.svg';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import { useDispatch } from "react-redux";
+import { ROUTE_PATH } from "constant/routes.const";
 
 const settings = [
   {
@@ -31,7 +32,7 @@ const Header = () => {
   const handleSignOut = () => {
     // dispatch(signOut());
     // dispatch(reset());
-    navigate('/admin/login');
+    navigate(ROUTE_PATH.LOGIN);
   };
   return (
     <Box sx={{ flexGrow: 1 }} className='header-container'>

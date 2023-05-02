@@ -1,11 +1,168 @@
+import { Button, Stack } from "@mui/material"
+import { moneyConvert } from "utils/Ultilities"
+import { PRODUCT_FIELD_NAME } from "./create-product/fieldName"
+
+const PFN = PRODUCT_FIELD_NAME
+
 export const TABLE_COLUMNS = [
-  { field: "id", headerName: "STT", width: 70 },
-  { field: "modelSeries", headerName: "Series" },
-  { field: "productCode", headerName: "Code" },
-  { field: "productName", headerName: "Name" },
-  { field: "price", headerName: "Price" },
-  { field: "description", headerName: "Description" },
+  { field: PFN.ID, headerName: "STT", width: 60, sortable: false },
+  {
+    field: PFN.PRODUCT_NAME,
+    headerName: "Tên sản phẩm",
+    width: 250,
+    sortable: false,
+  },
+  // { field: "modelSeries", headerName: "Loại sản phẩm" },
+  {
+    field: PFN.MODEL_SERIES,
+    headerName: "Dòng sản phẩm",
+    width: 150,
+    sortable: false,
+  },
+  { field: PFN.BRAND.ID, headerName: "Nhãn hiệu", width: 120, sortable: false },
+  {
+    field: PFN.PRICE,
+    headerName: "Price",
+    width: 150,
+    sortable: false,
+    renderCell: (params) => {
+      return moneyConvert(params?.value)
+    },
+  },
+  {
+    field: PFN.SALE_OFF,
+    headerName: "Khuyến mãi",
+    width: 150,
+    sortable: false,
+    renderCell: (params) => {
+      return (params?.value) + '%'
+    },
+  },
+  { field: PFN.DESCRIPTION, headerName: "Mô tả", width: 200, sortable: false },
+  {
+    field: "action",
+    headerName: "Action",
+    sortable: false,
+    renderCell: (params) => {
+      return (
+        <Stack direction='row' spacing={2}>
+          <a href='#'>Edit</a>
+          <a href='#'>Delete</a>
+        </Stack>
+      )
+    },
+  },
 ]
+
+export const RAM_LOV = ["2GB", "4GB", "6GB", "8GB", "10GB", "12GB", "16GB"]
+
+export const ROM_LOV = [
+  "16GB",
+  "32GB",
+  "64GB",
+  "128GB",
+  "256GB",
+  "512GB",
+  "1TGB",
+]
+
+export const CPU_LOV = [
+  "Apple A15 Bionic",
+  "Apple A14 Bionic",
+  "Chip Snapdragon 888",
+  "Qualcomm Snapdragon 865",
+  "Chip Exynos 990",
+  "Exynos 1080",
+  "MediaTek’s Dimensity 1000",
+  "MediaTek Dimensity 800",
+  "Qualcomm Snapdragon 855 Plus",
+  "Qualcomm Snapdragon 855",
+]
+
+export const WARRANTY_LOV = [
+  "3 tháng",
+  "6 tháng",
+  "12 tháng",
+  "24 tháng",
+  "36 tháng",
+]
+
+export const CORE_LOV = [
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+  "10",
+  "11",
+  "12",
+]
+
+export const CPU_CLOCK_LOV = [
+  "1.6Ghz",
+  "1.8Ghz",
+  "2.0Ghz",
+  "2.4Ghz",
+  "2.6Ghz",
+  "3.6Ghz",
+  "3.9Ghz",
+  "4.2Ghz",
+  "4.6Ghz",
+]
+
+export const SCREEN_SIZE_LOV = [
+  "5.8 inch",
+  "6.1 inch",
+  "6.5 inch",
+  "6.7 inch",
+  "7 inch",
+  "7.9 inch",
+  "8 inch",
+  "8.3 inch",
+  "9.7 inch",
+  "10.1 inch",
+  "12.2 inch",
+  "13.3 inch",
+  "14 inch",
+  "15.6 inch",
+  "17 inch",
+]
+
+export const SCREEN_TECH_LOV = [
+  "LCD",
+  "TFT-LCD",
+  "IPS",
+  "Retina",
+  "OLED",
+  "AMOLED",
+  "Super AMOLED",
+  "S-LCD",
+  "ClearBlack",
+  "E-Ink",
+]
+
+export const RESOLUTION_LOV = [
+  "1366 x 768 (HD)",
+  "1920 x 1080 (Full HD or 1080p)",
+  "2560 x 1440 (WQHD or 1440p)",
+  "3840 x 2160 (4K or UHD)",
+  "5120 x 2880 (5K)",
+  "7680 x 4320 (8K)",
+  "1280 x 720 (720p)",
+  "1600 x 900 (HD+)",
+  "3440 x 1440 (Ultrawide QHD)",
+  "4096 x 2160 (DCI 4K)",
+  "5120 x 2160 (Ultrawide 5K)",
+  "7680 x 4320 (16K)",
+]
+
+export const STANDARD_SCREEN_LOV = []
+
+export const FREQUENCY_SCREEN_LOV = []
 
 export const fakeData = [
   {

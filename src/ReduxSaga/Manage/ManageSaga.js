@@ -10,6 +10,22 @@ export function* watchManageSaga() {
       ManageActions.getProductByCategoryRequest.type,
       handleGetProductByCategory
     ),
+    takeLatest(
+      ManageActions.getBrandByCategoryRequest.type,
+      handleGetBrandByCategory
+    ),
+    takeLatest(
+      ManageActions.getBrandByCategoryRequest.type,
+      handleGetBrandByCategory
+    ),
+    takeLatest(
+      ManageActions.getImageLinkRequest.type,
+      handleGetImageLink
+    ),
+    takeLatest(
+      ManageActions.saveFileRequest.type,
+      handleSaveFile
+    ),
   ])
 }
 
@@ -30,7 +46,58 @@ function* handleGetProductByCategory(action) {
   const { params, callback } = action.payload
   try {
     const api = () =>
-      ApiUtil.fetch(ApiConfig.GET_PRODUCT_BY_CATEGORY, { method: "GET", params })
+      ApiUtil.fetch(ApiConfig.GET_PRODUCT_BY_CATEGORY, {
+        method: "GET",
+        params,
+      })
+    const response = yield call(api)
+    const isSuccess = response?.code === 200
+    callback && callback(response.data)
+  } catch (error) {
+    console.log("error", error)
+  }
+}
+
+function* handleGetBrandByCategory(action) {
+  const { params, callback } = action.payload
+  try {
+    const api = () =>
+      ApiUtil.fetch(ApiConfig.GET_BRAND_BY_CATEGORY, {
+        method: "GET",
+        params,
+      })
+    const response = yield call(api)
+    const isSuccess = response?.code === 200
+    callback && callback(response.data)
+  } catch (error) {
+    console.log("error", error)
+  }
+}
+
+function* handleGetImageLink(action) {
+  const { params, callback } = action.payload
+  try {
+    const api = () =>
+      ApiUtil.fetch(ApiConfig.GET_IMAGE_LINK, {
+        method: "GET",
+        params,
+      })
+    const response = yield call(api)
+    const isSuccess = response?.code === 200
+    callback && callback(response?.data)
+  } catch (error) {
+    console.log("error", error)
+  }
+}
+
+function* handleSaveFile(action) {
+  const { data, callback } = action.payload
+  try {
+    const api = () =>
+      ApiUtil.fetch(ApiConfig.SAVE_FILE, {
+        method: "POST",
+        data,
+      })
     const response = yield call(api)
     const isSuccess = response?.code === 200
     callback && callback(response.data)

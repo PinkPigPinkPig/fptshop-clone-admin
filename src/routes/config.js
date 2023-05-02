@@ -15,26 +15,26 @@ export const routesList = [
         path: ROUTE_PATH.LOGIN,
         isProtected: false,
     },
-    {
-        component: Login,
-        path: ROUTE_PATH.LOGIN,
-        isProtected: false,
-    },
-    {
-        component: ManageProduct,
-        path: ROUTE_PATH.MANAGE_PRODUCT,
-        isProtected: false,
-    },
-    {
-        component: ProductForm,
-        path: ROUTE_PATH.CREATE_PRODUCT,
-        isProtected: false,
-    },
-    {
-        component: ProductForm,
-        path: ROUTE_PATH.UPDATE_PRODUCT,
-        isProtected: false,
-    },
+    // {
+    //     component: Login,
+    //     path: ROUTE_PATH.LOGIN,
+    //     isProtected: false,
+    // },
+    // {
+    //     component: ManageProduct,
+    //     path: ROUTE_PATH.MANAGE_PRODUCT,
+    //     isProtected: false,
+    // },
+    // {
+    //     component: ProductForm,
+    //     path: ROUTE_PATH.CREATE_PRODUCT,
+    //     isProtected: false,
+    // },
+    // {
+    //     component: ProductForm,
+    //     path: ROUTE_PATH.UPDATE_PRODUCT,
+    //     isProtected: false,
+    // },
 ]
 
 export const commonLayoutRoutesList = [
@@ -43,21 +43,21 @@ export const commonLayoutRoutesList = [
         path: ROUTE_PATH.HOME,
         isProtected: true,
     },
-    // {
-    //     component: ManageProduct,
-    //     path: ROUTE_PATH.CREATE_PRODUCT,
-    //     isProtected: true,
-    // },
-    // {
-    //     component: ProductForm,
-    //     path: ROUTE_PATH.UPDATE_PRODUCT,
-    //     isProtected: true,
-    // },
-    // {
-    //     component: ProductForm,
-    //     path: ROUTE_PATH.UPDATE_PRODUCT,
-    //     isProtected: true,
-    // },
+    {
+        component: ManageProduct,
+        path: ROUTE_PATH.MANAGE_PRODUCT,
+        isProtected: true,
+    },
+    {
+        component: ProductForm,
+        path: ROUTE_PATH.UPDATE_PRODUCT,
+        isProtected: true,
+    },
+    {
+        component: ProductForm,
+        path: ROUTE_PATH.CREATE_PRODUCT,
+        isProtected: true,
+    },
     {
         component: ManageAccount,
         path: ROUTE_PATH.MANAGE_ACCOUNT,

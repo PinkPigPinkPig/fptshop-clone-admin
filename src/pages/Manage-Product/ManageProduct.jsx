@@ -40,14 +40,18 @@ const ManageProduct = () => {
           params: {
             categoryId: category,
           },
-          callback: (res) => setProductList(res?.content),
+          callback: (res) => {
+            if(res?.content) {
+              setProductList(res?.content)
+            }
+          },
         })
       )
     }
   }, [category])
 
   console.log("productList", productList)
-  console.log({category})
+  console.log({ category })
 
   const handleChange = (event) => {
     setCategory(event.target.value)
@@ -73,7 +77,7 @@ const ManageProduct = () => {
               label='Select Category'
               onChange={handleChange}
             >
-              {categoryList.map((item, index) => {
+              {categoryList?.map((item, index) => {
                 return (
                   <MenuItem key={item?.id} value={item?.id}>
                     {item?.categoryName}

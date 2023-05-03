@@ -36,7 +36,7 @@ function* handleGetAllCategory(action) {
       ApiUtil.fetch(ApiConfig.GET_ALL_CATEGORY, { method: "GET" })
     const response = yield call(api)
     const isSuccess = response?.code === 200
-    callback && callback(response.data)
+    callback && callback(response?.data)
   } catch (error) {
     console.log("error", error)
   }
@@ -52,7 +52,7 @@ function* handleGetProductByCategory(action) {
       })
     const response = yield call(api)
     const isSuccess = response?.code === 200
-    callback && callback(response.data)
+    callback && callback(response?.data)
   } catch (error) {
     console.log("error", error)
   }
@@ -68,7 +68,7 @@ function* handleGetBrandByCategory(action) {
       })
     const response = yield call(api)
     const isSuccess = response?.code === 200
-    callback && callback(response.data)
+    callback && callback(response?.data)
   } catch (error) {
     console.log("error", error)
   }
@@ -100,7 +100,7 @@ function* handleSaveFile(action) {
       })
     const response = yield call(api)
     const isSuccess = response?.code === 200
-    callback && callback(response.data)
+    callback && callback(response?.data)
   } catch (error) {
     console.log("error", error)
   }

@@ -6,6 +6,8 @@ import { ReactComponent as HomepageLogo } from '../../assets/icon/homepage-logo.
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import { useDispatch } from "react-redux";
 import { ROUTE_PATH } from "constant/routes.const";
+import { localStorageHelper } from "helpers";
+import { LOCAL_STORE } from "constant/system.const";
 
 const settings = [
   {
@@ -33,6 +35,7 @@ const Header = () => {
     // dispatch(signOut());
     // dispatch(reset());
     navigate(ROUTE_PATH.LOGIN);
+    localStorageHelper.removeItem(LOCAL_STORE.TOKEN)
   };
   return (
     <Box sx={{ flexGrow: 1 }} className='header-container'>

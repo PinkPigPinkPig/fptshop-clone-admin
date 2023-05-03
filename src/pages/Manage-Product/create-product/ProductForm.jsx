@@ -35,6 +35,8 @@ import { useLocation, useNavigate } from "react-router-dom"
 import { ROUTE_PATH } from "constant/routes.const"
 import { useDispatch } from "react-redux"
 import { ManageActions } from "ReduxSaga/Manage/ManageRedux"
+import { uploadRequest } from "utils/ApiUtil"
+import { array } from "yup"
 
 const PFN = PRODUCT_FIELD_NAME
 
@@ -43,6 +45,7 @@ const ProductForm = () => {
   const [productId, setProductId] = useState()
   const [isUpdate, setIsUpdate] = useState(false)
   const [brandList, setBrandList] = useState([])
+  const [image, setImage] = useState("")
   const dispatch = useDispatch()
   const methods = useForm({
     mode: "onSubmit",
@@ -67,28 +70,37 @@ const ProductForm = () => {
     if (location?.state?.categoryId) {
       setCategoryId(location?.state?.categoryId)
     }
-    if(location?.state?.productId) {
+    if (location?.state?.productId) {
       setProductId(location?.state?.productId)
       setIsUpdate(true)
     }
   }, [location])
 
-  useEffect(() => {
-
-  }, [])
+  useEffect(() => {}, [])
 
   const onChangeFile = (field, file, cb) => {
     fileListRef.current[field] = file
     cb(file?.name)
-    console.log({file})
-    dispatch(ManageActions.getImageLinkRequest({
-      params: {
-        numberLink: 1,
-      },
-      callback: (res) => {
-        console.log({res})
-      }
-    }))
+    console.log(typeof file)
+    if (file) {
+      dispatch(
+        ManageActions.getImageLinkRequest({
+          params: {
+            numberLink: 1,
+          },
+          callback: async (res) => {
+            const urlObject = res?.[0]
+            const buffer = await file?.arrayBuffer()
+            if (urlObject?.urlUpload && urlObject?.urlFile) {
+              uploadRequest.fetch(urlObject?.urlUpload, {
+                data: file,
+                contentType: file.type,
+              })
+            }
+          },
+        })
+      )
+    }
   }
 
   const handleCreateNewProduct = () => {

@@ -3,6 +3,8 @@ import { ROUTE_PATH } from '../constant/routes.const'
 
 const Home = React.lazy(() => import('../pages/Home/Home'))
 const Login = React.lazy(() => import('../pages/Login/Login'))
+const SignUp = React.lazy(() => import('../pages/Sign-Up/SignUp'))
+const ForgotPassword = React.lazy(() => import('../pages/Forgot-Password/ForgotPassword'))
 const ManageProduct = React.lazy(() => import('../pages/Manage-Product'))
 const ManageAccount = React.lazy(() => import('../pages/Manage-Account'))
 const ManageUser = React.lazy(() => import('../pages/Manage-User'))
@@ -13,6 +15,16 @@ export const routesList = [
     {
         component: Login,
         path: ROUTE_PATH.LOGIN,
+        isProtected: false,
+    },
+    {
+        component: SignUp,
+        path: ROUTE_PATH.SIGN_UP,
+        isProtected: false,
+    },
+    {
+        component: ForgotPassword,
+        path: ROUTE_PATH.FORGOT_PASSWORD,
         isProtected: false,
     },
     // {

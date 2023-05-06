@@ -5,12 +5,13 @@ import {
   Button,
   InputAdornment,
   InputLabel,
+  Stack,
   TextField,
   Typography,
 } from "@mui/material"
 import React, { useState } from "react"
 import { useDispatch } from "react-redux"
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
 import { ReactComponent as HomepageLogo } from "../../../assets/icon/homepage-logo.svg"
 import { ROUTE_PATH } from "../../../constant/routes.const"
@@ -118,6 +119,10 @@ const LoginAdminForm = () => {
                   {isWrong && <Typography color={'red'}>Sai tài khoản hoặc mật khẩu</Typography>}
                 </div>
               </div>
+              <Stack direction='row' justifyContent='space-between'>
+                <Link to={ROUTE_PATH.SIGN_UP}>Đăng ký tài khoản</Link>
+                {/* <Link to={ROUTE_PATH.FORGOT_PASSWORD}>Quên mật khẩu</Link> */}
+              </Stack>
               <Button
                 onClick={handleLogin}
                 variant='contained'

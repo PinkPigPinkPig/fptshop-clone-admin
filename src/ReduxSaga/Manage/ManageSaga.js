@@ -26,6 +26,23 @@ export function* watchManageSaga() {
       ManageActions.saveFileRequest.type,
       handleSaveFile
     ),
+    takeLatest(
+      ManageActions.createProductRequest.type,
+      handleCreateProduct
+    ),
+    takeLatest(
+      ManageActions.updateProductRequest.type,
+      handleUpdateProduct
+    ),
+    takeLatest(
+      ManageActions.deleteProductRequest.type,
+      handleDeleteProduct
+    ),
+    takeLatest(
+      ManageActions.getOrderRequest.type,
+      handleGetOrder
+    ),
+
   ])
 }
 
@@ -95,6 +112,70 @@ function* handleSaveFile(action) {
   try {
     const api = () =>
       ApiUtil.fetch(ApiConfig.SAVE_FILE, {
+        method: "POST",
+        data,
+      })
+    const response = yield call(api)
+    const isSuccess = response?.code === 200
+    callback && callback(response?.data)
+  } catch (error) {
+    console.log("error", error)
+  }
+}
+
+function* handleCreateProduct(action) {
+  const { data, callback } = action.payload
+  try {
+    const api = () =>
+      ApiUtil.fetch(ApiConfig.PRODUCT, {
+        method: "POST",
+        data,
+      })
+    const response = yield call(api)
+    const isSuccess = response?.code === 200
+    callback && callback(response?.data)
+  } catch (error) {
+    console.log("error", error)
+  }
+}
+
+function* handleUpdateProduct(action) {
+  const { data, callback } = action.payload
+  try {
+    const api = () =>
+      ApiUtil.fetch(ApiConfig.PRODUCT, {
+        method: "PUT",
+        data,
+      })
+    const response = yield call(api)
+    const isSuccess = response?.code === 200
+    callback && callback(response?.data)
+  } catch (error) {
+    console.log("error", error)
+  }
+}
+
+function* handleDeleteProduct(action) {
+  const { data, callback } = action.payload
+  try {
+    const api = () =>
+      ApiUtil.fetch(ApiConfig.PRODUCT, {
+        method: "DELETE",
+        data,
+      })
+    const response = yield call(api)
+    const isSuccess = response?.code === 200
+    callback && callback(response?.data)
+  } catch (error) {
+    console.log("error", error)
+  }
+}
+
+function* handleGetOrder(action) {
+  const { data, callback } = action.payload
+  try {
+    const api = () =>
+      ApiUtil.fetch(ApiConfig.GET_ORDER, {
         method: "POST",
         data,
       })

@@ -9,6 +9,8 @@ const authRedux = createSlice({
         loginRequest: (state, action) => {},
         loginSuccess: (state, action) => {},
         loginFailed: (state, action) => {},
+
+        signupRequest: (state, action) => {},
     }
 })
 

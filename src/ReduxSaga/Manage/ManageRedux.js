@@ -11,6 +11,11 @@ const manageRedux = createSlice({
         getBrandByCategoryRequest: (state, action) => {},
         getImageLinkRequest: (state, action) => {},
         saveFileRequest: (state, action) => {},
+        createProductRequest: (state, action) => {},
+        updateProductRequest: (state, action) => {},
+        deleteProductRequest: (state, action) => {},
+
+        getOrderRequest: (state, action) => {},
     }
 })
 

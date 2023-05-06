@@ -1,4 +1,5 @@
 import { cloneDeep } from "lodash"
+import { PRODUCT_FIELD_NAME } from "pages/Manage-Product/create-product/fieldName"
 
 export const moneyConvert = (number, num = 1) => {
   const result = number * num
@@ -10,34 +11,36 @@ export const calculatePayMoney = (price, saleOff, num = 1) => {
   return result?.toLocaleString("it-IT", { style: "currency", currency: "VND" })
 }
 
-export const mapSubmitData = (data, fileListObj) => {
-  let submitData = cloneDeep(data)
-  let files = []
-  if (submitData.type === COURSE_TYPE.OFFER) {
-    submitData.fileNameProvideBy = undefined
-    // submitData.fileNameProvideBy2 = undefined;
-    // submitData.fileNameProvideBy3 = undefined;
-    files = omit(fileListObj, ["fileNameProvideBy"])
+export const mapCreateData = (formValue, image) => {
+  const PFN = PRODUCT_FIELD_NAME
+  const data = {
+    [PFN.PRODUCT_NAME]: formValue?.[PFN.PRODUCT_NAME],
+    [PFN.MODEL_SERIES]: formValue?.[PFN.MODEL_SERIES],
+    [PFN.PRICE]: formValue?.[PFN.PRICE],
+    // [PFN.SALE_OFF]: formValue?.[PFN.SALE_OFF],
+    [PFN.TOTAL_PRODUCT]: formValue?.[PFN.TOTAL_PRODUCT],
+    [PFN.DESCRIPTION]: formValue?.[PFN.DESCRIPTION],
+    [PFN.IMAGES]: [{
+      
+      "imageName": "string",
+      "imageLink": image,
+      "fileType": 1,
+      "productId": null
+      
+    }],
+    [PFN.SPECIFICATION.SPECIFICATION]: {
+      [PFN.SPECIFICATION.CPU]: formValue?.[PFN.SPECIFICATION.CPU],
+      [PFN.SPECIFICATION.CORE]: formValue?.[PFN.SPECIFICATION.CORE],
+      [PFN.SPECIFICATION.CPU_CLOCK]: formValue?.[PFN.SPECIFICATION.CPU_CLOCK],
+      [PFN.SPECIFICATION.RAM]: formValue?.[PFN.SPECIFICATION.RAM],
+      [PFN.SPECIFICATION.ROM]: formValue?.[PFN.SPECIFICATION.ROM],
+      [PFN.SPECIFICATION.SCREEN_SIZE]: formValue?.[PFN.SPECIFICATION.SCREEN_SIZE],
+      [PFN.SPECIFICATION.SCREEN_TECH]: formValue?.[PFN.SPECIFICATION.SCREEN_TECH],
+      [PFN.SPECIFICATION.RESOLUTION]: formValue?.[PFN.SPECIFICATION.RESOLUTION],
+    },
+    categoryId: formValue?.[PFN.CATEGORY.ID] || 1,
+    brandId: formValue?.[PFN.BRAND.ID] || 1,
+
   }
-  if (submitData.type === COURSE_TYPE.PROVIDE) {
-    submitData.fileNameOfferBy = undefined
-    files = omit(fileListObj, ["fileNameOfferBy"])
-  }
-  submitData.requirementCourses = getAllNonEmptyValue(
-    submitData.requirementCourses
-  )
-  // if (submitData.requireApproval === 'false') {
-  //   submitData.approveName = undefined;
-  // }
-  // if (submitData.requireCancel === 'false') {
-  //   submitData.cancelName = undefined;
-  // }
-  submitData = omit(submitData, [
-    "type",
-    // 'requireApproval',
-    // 'requireCancel',
-    "programYear",
-    "programKey",
-  ])
-  return { submitData, files }
+  return data
 }

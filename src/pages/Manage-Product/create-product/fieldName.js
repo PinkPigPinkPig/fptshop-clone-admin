@@ -4,6 +4,7 @@ export const PRODUCT_FIELD_NAME = {
     PRODUCT_CODE: 'productCode',
     MODEL_SERIES: 'modelSeries',
     PRICE: 'price',
+    TOTAL_PRODUCT: 'totalProduct',
     DESCRIPTION: 'description',
     SPECIFICATION: {
         SPECIFICATION: 'specification',

@@ -2,6 +2,7 @@ import { Navigate, Outlet, Route, Routes } from "react-router-dom"
 import { localStorageHelper } from "../helpers"
 import { CommonLayout } from "../layout/common"
 import { commonLayoutRoutesList, routesList } from "./config"
+import { ROUTE_PATH } from "constant/routes.const"
 
 function PrivateOutlet() {
   return localStorageHelper.isLogin() ? <Outlet /> : <Navigate to={ROUTE_PATH.LOGIN} />

@@ -82,6 +82,7 @@ const ProductForm = () => {
 
   useEffect(() => {
     if(categoryId) {
+      setValue(PFN.CATEGORY.ID, categoryId)
       dispatch(ManageActions.getBrandByCategoryRequest({
         params: {
           categoryId: categoryId
@@ -146,21 +147,21 @@ const ProductForm = () => {
       <FormLayout>
         <FlexRow>
           <Box width={"50%"}>
-            <FormControl label="Thương hiệu" required paddingLeft="0" disabled={isEmpty(brandList)}>
+            <FormControl label="Thương hiệu" required paddingLeft="0">
               <InputSelect
                 control={control}
                 name={PFN.BRAND.ID}
                 label="Chọn thương hiệu"
                 errorMes={errors?.[PFN.BRAND.ID]?.message}
-                onChange={(event) => {
-                  brandList?.forEach((item) => {
-                    if(item?.id == event.target.value) {
-                      if(item?.modelSeries) {
-                        setModelList(item?.modelSeries)
-                      }
-                    }
-                  })
-                }}
+                // onChange={(event) => {
+                //   brandList?.forEach((item) => {
+                //     if(item?.id == event.target.value) {
+                //       if(item?.modelSeries) {
+                //         setModelList(item?.modelSeries)
+                //       }
+                //     }
+                //   })
+                // }}
               >
                 {brandList?.map((item, index) => {
                   return (

@@ -38,8 +38,8 @@ export const mapCreateData = (formValue, image) => {
       [PFN.SPECIFICATION.SCREEN_TECH]: formValue?.[PFN.SPECIFICATION.SCREEN_TECH],
       [PFN.SPECIFICATION.RESOLUTION]: formValue?.[PFN.SPECIFICATION.RESOLUTION],
     },
-    categoryId: formValue?.[PFN.CATEGORY.ID] || 1,
-    brandId: formValue?.[PFN.BRAND.ID] || 1,
+    categoryId: formValue?.[PFN.CATEGORY.ID],
+    brandId: formValue?.[PFN.BRAND.ID],
 
   }
   return data

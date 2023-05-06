@@ -12,10 +12,14 @@ import { DataGrid } from "@mui/x-data-grid"
 import React, { useEffect, useState } from "react"
 import { useDispatch } from "react-redux"
 import { ManageActions } from "../../ReduxSaga/Manage/ManageRedux"
-import { fakeData, TABLE_COLUMNS } from "./config"
+import { fakeData } from "./config"
 import { useNavigate } from "react-router-dom"
 import { ROUTE_PATH } from "../../constant/routes.const"
 import { isNil } from "lodash"
+import { PRODUCT_FIELD_NAME } from "./create-product/fieldName"
+import { moneyConvert } from "utils/Ultilities"
+
+const PFN = PRODUCT_FIELD_NAME
 
 const ManageProduct = () => {
   const dispatch = useDispatch()
@@ -64,6 +68,56 @@ const ManageProduct = () => {
       },
     })
   }
+
+  const TABLE_COLUMNS = [
+    { field: PFN.ID, headerName: "STT", width: 60, sortable: false },
+    {
+      field: PFN.PRODUCT_NAME,
+      headerName: "Tên sản phẩm",
+      width: 250,
+      sortable: false,
+    },
+    // { field: "modelSeries", headerName: "Loại sản phẩm" },
+    {
+      field: PFN.MODEL_SERIES,
+      headerName: "Dòng sản phẩm",
+      width: 150,
+      sortable: false,
+    },
+    { field: PFN.BRAND.ID, headerName: "Nhãn hiệu", width: 120, sortable: false },
+    {
+      field: PFN.PRICE,
+      headerName: "Price",
+      width: 150,
+      sortable: false,
+      renderCell: (params) => {
+        return moneyConvert(params?.value)
+      },
+    },
+    {
+      field: PFN.SALE_OFF,
+      headerName: "Khuyến mãi",
+      width: 150,
+      sortable: false,
+      renderCell: (params) => {
+        return (params?.value) + '%'
+      },
+    },
+    { field: PFN.DESCRIPTION, headerName: "Mô tả", width: 200, sortable: false },
+    {
+      field: "action",
+      headerName: "Action",
+      sortable: false,
+      renderCell: (params) => {
+        return (
+          <Stack direction='row' spacing={2}>
+            <a href='#'>Edit</a>
+            <a href='#'>Delete</a>
+          </Stack>
+        )
+      },
+    },
+  ]
 
   return (
     <Box sx={{ backgroundColor: "#fff", padding: 3, borderRadius: 3 }}>

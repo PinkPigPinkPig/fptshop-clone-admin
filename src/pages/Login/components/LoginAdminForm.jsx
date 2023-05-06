@@ -148,7 +148,7 @@ const LoginAdminForm = () => {
         </div>
       </div>
 
-      <p className='copyright'>Copyright @2021 Udemy. All rights reserved.</p>
+      <p className='copyright'>Copyright @2021 SmartThings. All rights reserved.</p>
     </div>
   )
 }

@@ -49,7 +49,15 @@ const ProductForm = () => {
   const [isUpdate, setIsUpdate] = useState(false)
   const [brandList, setBrandList] = useState([])
   const [modelList, setModelList] = useState([])
-  const [image, setImage] = useState("")
+  const [image, setImage] = useState([
+    {
+      imageName: "",
+      imageLink: "",
+      fileType: 0,
+      productId: null,
+    },
+  ])
+  const [isCreate, setIsCreate] = useState(false)
   const dispatch = useDispatch()
   const methods = useForm({
     mode: "onSubmit",
@@ -70,32 +78,88 @@ const ProductForm = () => {
 
   const location = useLocation()
 
-  useEffect(() => {
-    if (location?.state?.categoryId) {
-      setCategoryId(location?.state?.categoryId)
-    }
-    if (location?.state?.productId) {
-      setProductId(location?.state?.productId)
-      setIsUpdate(true)
-    }
-  }, [location])
+  console.log({ location })
 
   useEffect(() => {
-    if(categoryId) {
+    if (location?.state?.isCreate) {
+      setIsCreate(location?.state?.isCreate)
+      setCategoryId(location?.state?.categoryId)
+    } else {
+      setIsCreate(location?.state?.isCreate)
+      setCategoryId(location?.state?.product?.category?.id)
+      setProductId(location?.state?.product?.id)
+      const product = location?.state?.product
+      const specification = location?.state?.product?.specification
+      setValue(PFN.BRAND.ID, product?.brand?.id)
+      setValue(PFN.MODEL_SERIES, product?.[PFN.MODEL_SERIES])
+      setValue(PFN.PRODUCT_NAME, product?.[PFN.PRODUCT_NAME])
+      setValue(PFN.PRODUCT_CODE, product?.[PFN.PRODUCT_CODE])
+      setValue(PFN.DESCRIPTION, product?.[PFN.DESCRIPTION])
+      setValue(PFN.PRICE, product?.[PFN.PRICE])
+      setValue(PFN.TOTAL_PRODUCT, product?.[PFN.TOTAL_PRODUCT])
+      setImage(product?.images, product?.images?.[0]?.imageName)
+      setValue(PFN.IMAGES, )
+      setValue(PFN.SPECIFICATION.CPU, specification?.[PFN.SPECIFICATION.CPU])
+      setValue(PFN.SPECIFICATION.CORE, specification?.[PFN.SPECIFICATION.CORE])
+      setValue(
+        PFN.SPECIFICATION.CPU_CLOCK,
+        specification?.[PFN.SPECIFICATION.CPU_CLOCK]
+      )
+      setValue(PFN.SPECIFICATION.RAM, specification?.[PFN.SPECIFICATION.RAM])
+      setValue(PFN.SPECIFICATION.ROM, specification?.[PFN.SPECIFICATION.ROM])
+      setValue(
+        PFN.SPECIFICATION.SCREEN_SIZE,
+        specification?.[PFN.SPECIFICATION.SCREEN_SIZE]
+      )
+      setValue(
+        PFN.SPECIFICATION.SCREEN_TECH,
+        specification?.[PFN.SPECIFICATION.SCREEN_TECH]
+      )
+      setValue(
+        PFN.SPECIFICATION.RESOLUTION,
+        specification?.[PFN.SPECIFICATION.RESOLUTION]
+      )
+    }
+  }, [location, brandList, modelList])
+
+  useEffect(() => {
+    if (categoryId) {
       setValue(PFN.CATEGORY.ID, categoryId)
-      dispatch(ManageActions.getBrandByCategoryRequest({
-        params: {
-          categoryId: categoryId
-        },
-        callback: (res) => {
-          // console.log({res})
-          if(res) {
-            setBrandList(res)
-          }
-        }
-      }))
+      dispatch(
+        ManageActions.getBrandByCategoryRequest({
+          params: {
+            categoryId: categoryId,
+          },
+          callback: (res) => {
+            // console.log({res})
+            if (res) {
+              setBrandList(res)
+            }
+          },
+        })
+      )
     }
   }, [categoryId])
+
+  useEffect(() => {
+    const id = getValues()?.[PFN.BRAND.ID]
+    brandList?.forEach((item) => {
+      if (item?.id == id) {
+        if (item?.modelSeries) {
+          setModelList(item?.modelSeries)
+        }
+      }
+    })
+  }, [watch(PFN.BRAND.ID)])
+
+  useEffect(() => {
+    const modelSeries = getValues()?.[PFN.MODEL_SERIES]
+    modelList?.forEach((item) => {
+      if (item?.modelSeries == modelSeries) {
+        setValue(PFN.PRODUCT_CODE, item?.[PFN.PRODUCT_CODE])
+      }
+    })
+  }, [watch(PFN.MODEL_SERIES), modelList])
 
   const onChangeFile = (field, file, cb) => {
     fileListRef.current[field] = file
@@ -110,13 +174,20 @@ const ProductForm = () => {
             const urlObject = res?.[0]
             const blob = new Blob([file], { type: file?.type })
             if (urlObject?.urlUpload && urlObject?.urlFile) {
-              setImage(urlObject?.urlFile)
+              setImage([
+                {
+                  imageName: file.name,
+                  imageLink: urlObject?.urlFile,
+                  fileType: 1,
+                  productId: null,
+                },
+              ])
               uploadRequest.fetch(
                 urlObject?.urlUpload,
                 {
                   data: blob,
                 },
-                file?.type,
+                file?.type
               )
             }
           },
@@ -128,14 +199,26 @@ const ProductForm = () => {
   const handleCreateNewProduct = () => {
     const formValue = getValues()
     const data = mapCreateData(formValue, image)
-    console.log({data})
-    dispatch(ManageActions.createProductRequest({
-      data,
-      callback: (res) => console.log({res})
-    }))
+    console.log({ data })
+    dispatch(
+      ManageActions.createProductRequest({
+        data,
+        callback: (res) => console.log({ res }),
+      })
+    )
   }
 
-  const handleUpdateProduct = () => {}
+  const handleUpdateProduct = () => {
+    const formValue = getValues()
+    const data = mapCreateData(formValue, image)
+    console.log({ data })
+    dispatch(
+      ManageActions.updateProductRequest({
+        data: {...data, id: productId},
+        callback: (res) => console.log({ res }),
+      })
+    )
+  }
 
   return (
     <Box sx={{ backgroundColor: "#fff", padding: 3, borderRadius: 3 }}>
@@ -153,15 +236,6 @@ const ProductForm = () => {
                 name={PFN.BRAND.ID}
                 label="Chọn thương hiệu"
                 errorMes={errors?.[PFN.BRAND.ID]?.message}
-                // onChange={(event) => {
-                //   brandList?.forEach((item) => {
-                //     if(item?.id == event.target.value) {
-                //       if(item?.modelSeries) {
-                //         setModelList(item?.modelSeries)
-                //       }
-                //     }
-                //   })
-                // }}
               >
                 {brandList?.map((item, index) => {
                   return (
@@ -174,17 +248,24 @@ const ProductForm = () => {
             </FormControl>
           </Box>
           <Box width={"50%"}>
-            <FormControl label="Model Series" required paddingRight="0" disabled={isEmpty(modelList)}>
+            <FormControl
+              label="Model Series"
+              required
+              paddingRight="0"
+              disabled={isEmpty(modelList)}
+            >
               <InputSelect
                 control={control}
                 name={PFN.MODEL_SERIES}
                 label="Chọn series"
                 errorMes={errors?.[PFN.MODEL_SERIES]?.message}
-                
+                // onChange={(event) => {
+                //   console.log(event.target.value)
+                // }}
               >
                 {modelList?.map((item, index) => {
                   return (
-                    <MenuItem key={item?.id} value={item?.id}>
+                    <MenuItem key={item?.id} value={item?.modelSeries}>
                       {item?.modelSeries}
                     </MenuItem>
                   )
@@ -466,9 +547,15 @@ const ProductForm = () => {
           >
             Hủy
           </Button>
-          <Button variant="contained" onClick={handleCreateNewProduct}>
-            Tạo mới
-          </Button>
+          {isCreate ? (
+            <Button variant="contained" onClick={handleCreateNewProduct}>
+              Tạo mới
+            </Button>
+          ) : (
+            <Button variant="contained" onClick={handleUpdateProduct}>
+              Cập nhật
+            </Button>
+          )}
         </Stack>
       </FormLayout>
     </Box>

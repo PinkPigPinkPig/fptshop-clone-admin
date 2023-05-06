@@ -165,7 +165,7 @@ function* handleDeleteProduct(action) {
       })
     const response = yield call(api)
     const isSuccess = response?.code === 200
-    callback && callback(response?.data)
+    callback && callback(isSuccess)
   } catch (error) {
     console.log("error", error)
   }

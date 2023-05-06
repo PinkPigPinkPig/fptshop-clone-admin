@@ -13,7 +13,7 @@ import React, { useEffect, useState } from "react"
 import { useDispatch } from "react-redux"
 import { ManageActions } from "../../ReduxSaga/Manage/ManageRedux"
 import { fakeData } from "./config"
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { ROUTE_PATH } from "../../constant/routes.const"
 import { isNil } from "lodash"
 import { PRODUCT_FIELD_NAME } from "./create-product/fieldName"
@@ -108,11 +108,12 @@ const ManageProduct = () => {
       field: "action",
       headerName: "Action",
       sortable: false,
+      fixed: 'right',
       renderCell: (params) => {
         return (
           <Stack direction='row' spacing={2}>
-            <a href='#'>Edit</a>
-            <a href='#'>Delete</a>
+            <Link to='#'>Edit</Link>
+            <Link to='#'>Delete</Link>
           </Stack>
         )
       },

@@ -9,6 +9,7 @@ const ManageProduct = React.lazy(() => import('../pages/Manage-Product'))
 const ManageAccount = React.lazy(() => import('../pages/Manage-Account'))
 const ManageUser = React.lazy(() => import('../pages/Manage-User'))
 const ManageOrder = React.lazy(() => import('../pages/Manage-Order'))
+const OrderDetail = React.lazy(() => import('../pages/Manage-Order/OrderDetail'))
 const ProductForm = React.lazy(() => import('../pages/Manage-Product/create-product'))
 
 export const routesList = [
@@ -83,6 +84,11 @@ export const commonLayoutRoutesList = [
     {
         component: ManageOrder,
         path: ROUTE_PATH.MANAGE_ORDER,
+        isProtected: true,
+    },
+    {
+        component: OrderDetail,
+        path: ROUTE_PATH.ORDER_DETAIL,
         isProtected: true,
     },
 ]

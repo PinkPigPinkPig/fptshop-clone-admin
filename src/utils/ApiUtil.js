@@ -10,6 +10,7 @@ const UNAUTHORIZE_URL = [
   ApiConfig.GET_PRODUCT_BY_CATEGORY,
   ApiConfig.GET_BRAND_BY_CATEGORY,
   ApiConfig.LOGIN,
+  ApiConfig.GET_ORDER_DETAIL,
 ]
 class ApiUtil {
   fetch = async (url = "", config = {}) => {

@@ -42,6 +42,14 @@ export function* watchManageSaga() {
       ManageActions.getOrderRequest.type,
       handleGetOrder
     ),
+    takeLatest(
+      ManageActions.getOrderDetailRequest.type,
+      handleGetOrderDetail
+    ),
+    takeLatest(
+      ManageActions.updateOrderRequest.type,
+      handleUpdateOrder
+    ),
 
   ])
 }
@@ -132,8 +140,8 @@ function* handleCreateProduct(action) {
         data,
       })
     const response = yield call(api)
-    const isSuccess = response?.code === 200
-    callback && callback(response?.data)
+    const isSuccess = response?.code === 200 && response?.message == 'Success'
+    callback && callback(isSuccess)
   } catch (error) {
     console.log("error", error)
   }
@@ -148,8 +156,8 @@ function* handleUpdateProduct(action) {
         data,
       })
     const response = yield call(api)
-    const isSuccess = response?.code === 200
-    callback && callback(response?.data)
+    const isSuccess = response?.code === 200 && response?.message == 'Success'
+    callback && callback(isSuccess)
   } catch (error) {
     console.log("error", error)
   }
@@ -182,6 +190,38 @@ function* handleGetOrder(action) {
     const response = yield call(api)
     const isSuccess = response?.code === 200
     callback && callback(response?.data)
+  } catch (error) {
+    console.log("error", error)
+  }
+}
+
+function* handleGetOrderDetail(action) {
+  const { params, callback } = action.payload
+  try {
+    const api = () =>
+      ApiUtil.fetch(ApiConfig.GET_ORDER_DETAIL, {
+        method: "GET",
+        params,
+      })
+    const response = yield call(api)
+    const isSuccess = response?.code === 200
+    callback && callback(response?.data)
+  } catch (error) {
+    console.log("error", error)
+  }
+}
+
+function* handleUpdateOrder(action) {
+  const { data, callback } = action.payload
+  try {
+    const api = () =>
+      ApiUtil.fetch(ApiConfig.UPDATE_ORDER, {
+        method: "POST",
+        data,
+      })
+    const response = yield call(api)
+    const isSuccess = response?.code === 200 && response?.message == 'Success'
+    callback && callback(isSuccess)
   } catch (error) {
     console.log("error", error)
   }

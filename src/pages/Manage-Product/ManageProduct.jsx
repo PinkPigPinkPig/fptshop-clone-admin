@@ -20,7 +20,6 @@ import { ROUTE_PATH } from "../../constant/routes.const"
 import { isNil } from "lodash"
 import { PRODUCT_FIELD_NAME } from "./create-product/fieldName"
 import { moneyConvert } from "utils/Ultilities"
-import { useDemoData } from "@mui/x-data-grid-generator"
 
 const PFN = PRODUCT_FIELD_NAME
 
@@ -164,12 +163,6 @@ const ManageProduct = () => {
   const closeModal = (params) => {
     setOpenDeleteModal(false)
   }
-
-  const { data } = useDemoData({
-    dataSet: "Commodity",
-    rowLength: 100,
-    maxColumns: 6,
-  })
 
   return (
     <Box sx={{ backgroundColor: "#fff", padding: 3, borderRadius: 3 }}>

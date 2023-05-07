@@ -8,5 +8,6 @@ export const ROUTE_PATH = {
   UPDATE_PRODUCT: '/manage-product/update-product/:id',
   MANAGE_USER: '/manage-user',
   MANAGE_ORDER: '/manage-order',
+  ORDER_DETAIL: '/manage-order/detail/:id',
   MANAGE_ACCOUNT: '/manage-account',
 }

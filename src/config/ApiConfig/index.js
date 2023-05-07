@@ -9,5 +9,6 @@ export default {
     SAVE_FILE: '/api/v1/manage/save-file',
     PRODUCT: '/api/v1/manage/product',
     GET_ORDER: '/api/v1/manage/get-order',
+    GET_ORDER_DETAIL: '/api/v1/selling/get-detail-order',
     UPDATE_ORDER: '/api/v1/manage/update-order',
 }

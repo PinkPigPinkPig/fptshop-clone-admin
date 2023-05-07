@@ -18,7 +18,8 @@ import { ROUTE_PATH } from "../../constant/routes.const"
 import { LOCAL_STORE } from "../../constant/system.const"
 import { localStorageHelper } from "../../helpers"
 import { AuthActions } from "../../ReduxSaga/Auth/AuthRedux"
-import './Login.scss'
+import "./Login.scss"
+import logo from "../../assets/icon/logo.png"
 
 const SignUp = () => {
   const dispatch = useDispatch()
@@ -55,7 +56,7 @@ const SignUp = () => {
 
   const onKeyDownEnter = (event) => {
     if (event.key === "Enter") {
-        handleSignup()
+      handleSignup()
     }
   }
   return (
@@ -67,7 +68,11 @@ const SignUp = () => {
       }}
     >
       <div className="login">
-        <HomepageLogo className="login__cmc-logo" />
+        <img
+          src={logo}
+          style={{ maxWidth: 250, height: "auto" }}
+          className="login__cmc-logo"
+        />
         <div className="login-form-container">
           <div className="align-center">
             <h2 className="login-form__header">Đăng ký</h2>
@@ -103,9 +108,7 @@ const SignUp = () => {
                         ),
                       }}
                     />
-                    <InputLabel className="login-form__label">
-                      Email
-                    </InputLabel>
+                    <InputLabel className="login-form__label">Email</InputLabel>
                     <TextField
                       onKeyDown={onKeyDownEnter}
                       required

@@ -65,8 +65,6 @@ const ManageProduct = () => {
     }
   }, [category])
 
-  console.log({ category })
-
   const handleChange = (event) => {
     setCategory(event.target.value)
   }

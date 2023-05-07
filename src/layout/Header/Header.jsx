@@ -1,13 +1,23 @@
-import { AppBar, Avatar, Box, IconButton, Menu, MenuItem, Toolbar, Typography } from "@mui/material"
+import {
+  AppBar,
+  Avatar,
+  Box,
+  IconButton,
+  Menu,
+  MenuItem,
+  Toolbar,
+  Typography,
+} from "@mui/material"
 import { Container } from "@mui/system"
 import React from "react"
-import { Link, useNavigate } from "react-router-dom";
-import { ReactComponent as HomepageLogo } from '../../assets/icon/homepage-logo.svg';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import { useDispatch } from "react-redux";
-import { ROUTE_PATH } from "constant/routes.const";
-import { localStorageHelper } from "helpers";
-import { LOCAL_STORE } from "constant/system.const";
+import { Link, useNavigate } from "react-router-dom"
+import { ReactComponent as HomepageLogo } from "../../assets/icon/homepage-logo.svg"
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown"
+import { useDispatch } from "react-redux"
+import { ROUTE_PATH } from "constant/routes.const"
+import { localStorageHelper } from "helpers"
+import { LOCAL_STORE } from "constant/system.const"
+import logo from "../../assets/icon/logo.png"
 
 const settings = [
   {
@@ -23,50 +33,50 @@ const settings = [
 const Header = () => {
   const user = {}
   // const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const navigate = useNavigate()
+  const [anchorElUser, setAnchorElUser] = React.useState(null)
   const handleOpenUserMenu = (event) => {
-    setAnchorElUser(event.currentTarget);
-  };
+    setAnchorElUser(event.currentTarget)
+  }
   const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
-  };
+    setAnchorElUser(null)
+  }
   const handleSignOut = () => {
     // dispatch(signOut());
     // dispatch(reset());
-    navigate(ROUTE_PATH.LOGIN);
+    navigate(ROUTE_PATH.LOGIN)
     localStorageHelper.removeItem(LOCAL_STORE.TOKEN)
-  };
+  }
   return (
-    <Box sx={{ flexGrow: 1 }} className='header-container'>
+    <Box sx={{ flexGrow: 1 }} className="header-container">
       <AppBar
-        position='static'
+        position="static"
         sx={{ backgroundColor: "#FFF", color: "#0A033C", boxShadow: "none" }}
       >
-        <Container maxWidth='xl'>
+        <Container maxWidth="xl">
           <Toolbar disableGutters>
             <Box sx={{ flexGrow: 1 }}>
-              <Link to='/'>
-                <HomepageLogo />
+              <Link to="/">
+                <img src={logo} style={{ maxWidth: 200, height: "auto" }} />
               </Link>
             </Box>
             <div>
-              <div className='d-flex align-items-center'>
+              <div className="d-flex align-items-center">
                 <span>{user.username}</span>
                 <IconButton sx={{ p: 0, marginLeft: "1rem" }}>
                   <Avatar
-                    alt='profile'
+                    alt="profile"
                     src={user.avatarUrl ?? "/static/images/avatar/2.jpg"}
                   />
                 </IconButton>
                 <IconButton onClick={handleOpenUserMenu}>
-                  <ArrowDropDownIcon color='action' />
+                  <ArrowDropDownIcon color="action" />
                 </IconButton>
               </div>
 
               <Menu
                 sx={{ mt: "45px" }}
-                id='menu-appbar'
+                id="menu-appbar"
                 anchorEl={anchorElUser}
                 anchorOrigin={{
                   vertical: "top",
@@ -91,7 +101,7 @@ const Header = () => {
                       handleCloseUserMenu()
                     }}
                   >
-                    <Typography textAlign='center'>{setting.name}</Typography>
+                    <Typography textAlign="center">{setting.name}</Typography>
                   </MenuItem>
                 ))}
               </Menu>

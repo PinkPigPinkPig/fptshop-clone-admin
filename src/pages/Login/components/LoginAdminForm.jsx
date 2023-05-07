@@ -14,6 +14,7 @@ import { useDispatch } from "react-redux"
 import { Link, useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
 import { ReactComponent as HomepageLogo } from "../../../assets/icon/homepage-logo.svg"
+import logo from "../../../assets/icon/logo.png"
 import { ROUTE_PATH } from "../../../constant/routes.const"
 import { LOCAL_STORE } from "../../../constant/system.const"
 import { localStorageHelper } from "../../../helpers"
@@ -49,8 +50,6 @@ const LoginAdminForm = () => {
     dispatch(AuthActions.loginRequest({data: values, callback: loginCallback}))
   };
 
-  
-
   const onKeyDownEnter = (event) => {
     if (event.key === "Enter") {
       handleLogin()
@@ -58,7 +57,7 @@ const LoginAdminForm = () => {
   }
   return (
     <div className='login'>
-      <HomepageLogo className='login__cmc-logo' />
+      <img src={logo} style={{maxWidth: 250, height: 'auto'}} className='login__cmc-logo' />
       <div className='login-form-container'>
         <div className='align-center'>
           <h2 className='login-form__header'>Đăng nhập</h2>

@@ -37,7 +37,7 @@ export const CommonLayout = ({ children }) => {
       <Header />
       <Container maxWidth='xl'>
         <div className='my-2'>
-          <Breadcrumb />
+          {/* <Breadcrumb /> */}
         </div>
         {/* <Box className="common-layout-wrapper">{children}</Box> */}
         <Box className='common-layout-wrapper'>
@@ -74,8 +74,8 @@ export const CommonLayout = ({ children }) => {
                         className='name'
                         sx={{ display: "flex", flexDirection: "column" }}
                       >
-                        <span>Udemy</span>
-                        <span>Admin@udemy.com</span>
+                        <span>SmartThings</span>
+                        <span>Admin@SmartThings.com</span>
                       </Box>
                     </Box>
                     <TextField

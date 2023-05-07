@@ -10,4 +10,6 @@ export const ROUTE_PATH = {
   MANAGE_ORDER: '/manage-order',
   ORDER_DETAIL: '/manage-order/detail/:id',
   MANAGE_ACCOUNT: '/manage-account',
+  CREATE_ACCOUNT: '/manage-account/create-account',
+  UPDATE_ACCOUNT: '/manage-account/update-account/:username'
 }

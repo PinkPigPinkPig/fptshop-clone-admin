@@ -78,7 +78,7 @@ export const CommonLayout = ({ children }) => {
                         <span>Admin@SmartThings.com</span>
                       </Box>
                     </Box>
-                    <TextField
+                    {/* <TextField
                       required
                       placeholder='Tìm kiếm'
                       fullWidth
@@ -90,7 +90,7 @@ export const CommonLayout = ({ children }) => {
                           </InputAdornment>
                         ),
                       }}
-                    />
+                    /> */}
                   </Box>
                   <FlexCol sx={{ p: 2, gap: 0.5 }}>
                     {listSidebarItems.map((item) => {

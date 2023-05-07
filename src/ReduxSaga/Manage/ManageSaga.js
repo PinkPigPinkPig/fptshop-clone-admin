@@ -18,39 +18,20 @@ export function* watchManageSaga() {
       ManageActions.getBrandByCategoryRequest.type,
       handleGetBrandByCategory
     ),
-    takeLatest(
-      ManageActions.getImageLinkRequest.type,
-      handleGetImageLink
-    ),
-    takeLatest(
-      ManageActions.saveFileRequest.type,
-      handleSaveFile
-    ),
-    takeLatest(
-      ManageActions.createProductRequest.type,
-      handleCreateProduct
-    ),
-    takeLatest(
-      ManageActions.updateProductRequest.type,
-      handleUpdateProduct
-    ),
-    takeLatest(
-      ManageActions.deleteProductRequest.type,
-      handleDeleteProduct
-    ),
-    takeLatest(
-      ManageActions.getOrderRequest.type,
-      handleGetOrder
-    ),
-    takeLatest(
-      ManageActions.getOrderDetailRequest.type,
-      handleGetOrderDetail
-    ),
-    takeLatest(
-      ManageActions.updateOrderRequest.type,
-      handleUpdateOrder
-    ),
+    takeLatest(ManageActions.getImageLinkRequest.type, handleGetImageLink),
+    takeLatest(ManageActions.saveFileRequest.type, handleSaveFile),
+    takeLatest(ManageActions.createProductRequest.type, handleCreateProduct),
+    takeLatest(ManageActions.updateProductRequest.type, handleUpdateProduct),
+    takeLatest(ManageActions.deleteProductRequest.type, handleDeleteProduct),
+    takeLatest(ManageActions.getOrderRequest.type, handleGetOrder),
+    takeLatest(ManageActions.getOrderDetailRequest.type, handleGetOrderDetail),
+    takeLatest(ManageActions.updateOrderRequest.type, handleUpdateOrder),
 
+    takeLatest(ManageActions.getAccountListRequest.type, handleGetAccountList),
+    takeLatest(ManageActions.getAccountDetailRequest.type, handleGetAccountDetail),
+    takeLatest(ManageActions.createAccountRequest.type, handleCreateAccount),
+    takeLatest(ManageActions.updateAccountRequest.type, handleUpdateAccount),
+    takeLatest(ManageActions.deleteAccountRequest.type, handleDeleteAccount),
   ])
 }
 
@@ -140,7 +121,7 @@ function* handleCreateProduct(action) {
         data,
       })
     const response = yield call(api)
-    const isSuccess = response?.code === 200 && response?.message == 'Success'
+    const isSuccess = response?.code === 200 && response?.message == "Success"
     callback && callback(isSuccess)
   } catch (error) {
     console.log("error", error)
@@ -156,7 +137,7 @@ function* handleUpdateProduct(action) {
         data,
       })
     const response = yield call(api)
-    const isSuccess = response?.code === 200 && response?.message == 'Success'
+    const isSuccess = response?.code === 200 && response?.message == "Success"
     callback && callback(isSuccess)
   } catch (error) {
     console.log("error", error)
@@ -220,7 +201,86 @@ function* handleUpdateOrder(action) {
         data,
       })
     const response = yield call(api)
-    const isSuccess = response?.code === 200 && response?.message == 'Success'
+    const isSuccess = response?.code === 200 && response?.message == "Success"
+    callback && callback(isSuccess)
+  } catch (error) {
+    console.log("error", error)
+  }
+}
+
+function* handleGetAccountList(action) {
+  const { params, callback } = action.payload
+  try {
+    const api = () =>
+      ApiUtil.fetch(ApiConfig.GET_ACCOUNT_LIST, {
+        method: "GET",
+        params,
+      })
+    const response = yield call(api)
+    const isSuccess = response?.code === 200
+    callback && callback(response?.data)
+  } catch (error) {
+    console.log("error", error)
+  }
+}
+
+function* handleGetAccountDetail(action) {
+  const { username, callback } = action.payload
+  try {
+    const api = () =>
+      ApiUtil.fetch(ApiConfig.GET_ACCOUNT_DETAIL + `/${username}`, {
+        method: "GET",
+      })
+    const response = yield call(api)
+    const isSuccess = response?.code === 200
+    callback && callback(response?.data)
+  } catch (error) {
+    console.log("error", error)
+  }
+}
+
+function* handleCreateAccount(action) {
+  const { data, callback } = action.payload
+  try {
+    const api = () =>
+      ApiUtil.fetch(ApiConfig.ACCOUNT, {
+        method: "POST",
+        data,
+      })
+    const response = yield call(api)
+    const isSuccess = response?.code === 200 && response?.message == "Success"
+    callback && callback(isSuccess)
+  } catch (error) {
+    console.log("error", error)
+  }
+}
+
+function* handleUpdateAccount(action) {
+  const { data, callback } = action.payload
+  try {
+    const api = () =>
+      ApiUtil.fetch(ApiConfig.ACCOUNT, {
+        method: "POST",
+        data,
+      })
+    const response = yield call(api)
+    const isSuccess = response?.code === 200 && response?.message == "Success"
+    callback && callback(isSuccess)
+  } catch (error) {
+    console.log("error", error)
+  }
+}
+
+function* handleDeleteAccount(action) {
+  const { data, callback } = action.payload
+  try {
+    const api = () =>
+      ApiUtil.fetch(ApiConfig.ACCOUNT, {
+        method: "DELETE",
+        data,
+      })
+    const response = yield call(api)
+    const isSuccess = response?.code === 200
     callback && callback(isSuccess)
   } catch (error) {
     console.log("error", error)

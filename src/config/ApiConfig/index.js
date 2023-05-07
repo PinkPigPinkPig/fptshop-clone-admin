@@ -11,4 +11,7 @@ export default {
     GET_ORDER: '/api/v1/manage/get-order',
     GET_ORDER_DETAIL: '/api/v1/selling/get-detail-order',
     UPDATE_ORDER: '/api/v1/manage/update-order',
+    GET_ACCOUNT_LIST: '/api/v1/manage/search-account',
+    GET_ACCOUNT_DETAIL: '/api/v1/manage/account',
+    ACCOUNT: '/api/v1/manage/account',
 }

@@ -78,8 +78,6 @@ const ProductForm = () => {
 
   const location = useLocation()
 
-  console.log({ location })
-
   useEffect(() => {
     if (location?.state?.isCreate) {
       setIsCreate(location?.state?.isCreate)
@@ -234,7 +232,7 @@ const ProductForm = () => {
 
   return (
     <Box sx={{ backgroundColor: "#fff", padding: 3, borderRadius: 3 }}>
-      <Title>Thêm mới sản phẩm</Title>
+      <Title>{isCreate ? "Thêm mới sản phẩm" : "Cập nhật sản phẩm"}</Title>
       <Divider />
       <Typography sx={{ fontSize: 16, fontWeight: "700", marginTop: 3 }}>
         Thông tin chung
@@ -242,11 +240,11 @@ const ProductForm = () => {
       <FormLayout>
         <FlexRow>
           <Box width={"50%"}>
-            <FormControl label='Thương hiệu' required paddingLeft='0'>
+            <FormControl label="Thương hiệu" required paddingLeft="0">
               <InputSelect
                 control={control}
                 name={PFN.BRAND.ID}
-                label='Chọn thương hiệu'
+                label="Chọn thương hiệu"
                 errorMes={errors?.[PFN.BRAND.ID]?.message}
               >
                 {brandList?.map((item, index) => {
@@ -261,15 +259,15 @@ const ProductForm = () => {
           </Box>
           <Box width={"50%"}>
             <FormControl
-              label='Model Series'
+              label="Model Series"
               required
-              paddingRight='0'
+              paddingRight="0"
               disabled={isEmpty(modelList)}
             >
               <InputSelect
                 control={control}
                 name={PFN.MODEL_SERIES}
-                label='Chọn series'
+                label="Chọn series"
                 errorMes={errors?.[PFN.MODEL_SERIES]?.message}
                 // onChange={(event) => {
                 //   console.log(event.target.value)
@@ -288,13 +286,13 @@ const ProductForm = () => {
         </FlexRow>
         <FlexRow>
           <Box width={"50%"}>
-            <FormControl label='Tên sản phẩm' required paddingLeft='0'>
+            <FormControl label="Tên sản phẩm" required paddingLeft="0">
               <TextField
-                size='small'
+                size="small"
                 hiddenLabel
                 {...register(PFN.PRODUCT_NAME)}
                 autoFocus={true}
-                placeholder='Nhập tên sản phẩm'
+                placeholder="Nhập tên sản phẩm"
                 //   inputProps={{
                 //     maxLength: MAX_LENGTH.name
                 //   }}
@@ -307,13 +305,13 @@ const ProductForm = () => {
             </FormControl>
           </Box>
           <Box width={"50%"}>
-            <FormControl label='Mô tả sản phẩm' required paddingRight='0'>
+            <FormControl label="Mô tả sản phẩm" required paddingRight="0">
               <TextField
-                size='small'
+                size="small"
                 hiddenLabel
                 {...register(PFN.DESCRIPTION)}
                 autoFocus={true}
-                placeholder='Nhập mô tả'
+                placeholder="Nhập mô tả"
                 //   inputProps={{
                 //     maxLength: MAX_LENGTH.name
                 //   }}
@@ -328,13 +326,13 @@ const ProductForm = () => {
         </FlexRow>
         <FlexRow>
           <Box width={"50%"}>
-            <FormControl label='Giá sản phẩm' required paddingLeft='0'>
+            <FormControl label="Giá sản phẩm" required paddingLeft="0">
               <TextField
-                size='small'
+                size="small"
                 hiddenLabel
                 {...register(PFN.PRICE)}
                 autoFocus={true}
-                placeholder='Nhập giá sản phẩm'
+                placeholder="Nhập giá sản phẩm"
                 //   inputProps={{
                 //     maxLength: MAX_LENGTH.name
                 //   }}
@@ -347,13 +345,13 @@ const ProductForm = () => {
             </FormControl>
           </Box>
           <Box width={"50%"}>
-            <FormControl label='Số lượng' required paddingRight='0'>
+            <FormControl label="Số lượng" required paddingRight="0">
               <TextField
-                size='small'
+                size="small"
                 hiddenLabel
                 {...register(PFN.TOTAL_PRODUCT)}
                 autoFocus={true}
-                placeholder='Nhập số lượng sản phẩm'
+                placeholder="Nhập số lượng sản phẩm"
                 //   inputProps={{
                 //     maxLength: MAX_LENGTH.name
                 //   }}
@@ -369,17 +367,17 @@ const ProductForm = () => {
         <FlexRow>
           <Box width={"100%"}>
             <FormControl
-              label='Tải ảnh'
+              label="Tải ảnh"
               required
-              paddingLeft='0'
-              paddingRight='0'
+              paddingLeft="0"
+              paddingRight="0"
             >
               <Controller
                 name={PFN.IMAGES}
                 control={control}
                 render={({ field: { value, onChange } }) => (
                   <InputUpload
-                    placeholder='Tải ảnh'
+                    placeholder="Tải ảnh"
                     value={value}
                     // disabled={watchType !== COURSE_TYPE.OFFER}
                     onChange={(file) =>
@@ -399,7 +397,7 @@ const ProductForm = () => {
         </Typography>
         <FlexRow>
           <Box width={"50%"}>
-            <FormControl label='CPU' required paddingLeft='0'>
+            <FormControl label="CPU" required paddingLeft="0">
               <InputSelect
                 control={control}
                 name={PFN.SPECIFICATION.CPU}
@@ -417,7 +415,7 @@ const ProductForm = () => {
             </FormControl>
           </Box>
           <Box width={"50%"}>
-            <FormControl label='CORE' required>
+            <FormControl label="CORE" required>
               <InputSelect
                 control={control}
                 name={PFN.SPECIFICATION.CORE}
@@ -435,7 +433,7 @@ const ProductForm = () => {
             </FormControl>
           </Box>
           <Box width={"50%"}>
-            <FormControl label='CPU CLOCK' required paddingRight='0'>
+            <FormControl label="CPU CLOCK" required paddingRight="0">
               <InputSelect
                 control={control}
                 name={PFN.SPECIFICATION.CPU_CLOCK}
@@ -455,7 +453,7 @@ const ProductForm = () => {
         </FlexRow>
         <FlexRow>
           <Box width={"50%"}>
-            <FormControl label='RAM' required paddingLeft='0'>
+            <FormControl label="RAM" required paddingLeft="0">
               <InputSelect
                 control={control}
                 name={PFN.SPECIFICATION.RAM}
@@ -473,7 +471,7 @@ const ProductForm = () => {
             </FormControl>
           </Box>
           <Box width={"50%"}>
-            <FormControl label='ROM' required paddingRight='0'>
+            <FormControl label="ROM" required paddingRight="0">
               <InputSelect
                 control={control}
                 name={PFN.SPECIFICATION.ROM}
@@ -493,7 +491,7 @@ const ProductForm = () => {
         </FlexRow>
         <FlexRow>
           <Box width={"50%"}>
-            <FormControl label='SCREEN SIZE' required paddingLeft='0'>
+            <FormControl label="SCREEN SIZE" required paddingLeft="0">
               <InputSelect
                 control={control}
                 name={PFN.SPECIFICATION.SCREEN_SIZE}
@@ -511,7 +509,7 @@ const ProductForm = () => {
             </FormControl>
           </Box>
           <Box width={"50%"}>
-            <FormControl label='SCREEN TECH' required>
+            <FormControl label="SCREEN TECH" required>
               <InputSelect
                 control={control}
                 name={PFN.SPECIFICATION.SCREEN_TECH}
@@ -529,7 +527,7 @@ const ProductForm = () => {
             </FormControl>
           </Box>
           <Box width={"50%"}>
-            <FormControl label='RESOLUTION' required paddingRight='0'>
+            <FormControl label="RESOLUTION" required paddingRight="0">
               <InputSelect
                 control={control}
                 name={PFN.SPECIFICATION.RESOLUTION}
@@ -548,23 +546,23 @@ const ProductForm = () => {
           </Box>
         </FlexRow>
         <Stack
-          direction='row'
+          direction="row"
           spacing={2}
-          justifyContent='flex-end'
+          justifyContent="flex-end"
           marginTop={3}
         >
           <Button
-            variant='outlined'
+            variant="outlined"
             onClick={() => navigate(ROUTE_PATH.MANAGE_PRODUCT)}
           >
             Hủy
           </Button>
           {isCreate ? (
-            <Button variant='contained' onClick={handleCreateNewProduct}>
+            <Button variant="contained" onClick={handleCreateNewProduct}>
               Tạo mới
             </Button>
           ) : (
-            <Button variant='contained' onClick={handleUpdateProduct}>
+            <Button variant="contained" onClick={handleUpdateProduct}>
               Cập nhật
             </Button>
           )}

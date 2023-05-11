@@ -39,6 +39,9 @@ class ApiUtil {
         "response " + url + " >>>>>> " + response.status + " : ",
         data
       )
+      if (response.status == 403) {
+        localStorageHelper.removeItem(LOCAL_STORE.TOKEN)
+      }
       if (data && data.code === 200) {
         return data
       }

@@ -10,6 +10,7 @@ const ManageAccount = React.lazy(() => import('../pages/Manage-Account'))
 const ManageUser = React.lazy(() => import('../pages/Manage-User'))
 const ManageOrder = React.lazy(() => import('../pages/Manage-Order'))
 const OrderDetail = React.lazy(() => import('../pages/Manage-Order/OrderDetail'))
+const UserDetail = React.lazy(() => import('../pages/Manage-User/UserDetail'))
 const ProductForm = React.lazy(() => import('../pages/Manage-Product/create-product'))
 const AccountForm = React.lazy(() => import('../pages/Manage-Account/AccountForm'))
 
@@ -90,6 +91,11 @@ export const commonLayoutRoutesList = [
     {
         component: ManageUser,
         path: ROUTE_PATH.MANAGE_USER,
+        isProtected: true,
+    },
+    {
+        component: UserDetail,
+        path: ROUTE_PATH.USER_DETAIL,
         isProtected: true,
     },
     {

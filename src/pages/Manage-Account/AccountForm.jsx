@@ -46,32 +46,70 @@ const AccountForm = () => {
   }, [location])
 
   useEffect(() => {
-    if(isUpdate && username) {
-        dispatch(ManageActions.getAccountDetailRequest({
-            username,
-            callback: (res) => {
-                if(!isEmpty(res)) {
-                    setAccountDetail(res)
-                }
+    if (isUpdate && username) {
+      dispatch(
+        ManageActions.getAccountDetailRequest({
+          username,
+          callback: (res) => {
+            if (!isEmpty(res)) {
+              setAccountDetail(res)
             }
-        }))
+          },
+        })
+      )
     }
   }, [username, isUpdate])
 
   useEffect(() => {
-    if(!isEmpty(accountDetail)) {
-        setValue('fullName', accountDetail?.fullName || 'Vũ Quý Tuấn')
-        setValue('dob', accountDetail?.dob || '27/06/2000')
-        setValue('email', accountDetail?.email || 'abc@gmail.com')
-        setValue('phoneNumber', accountDetail?.phoneNumber || '0359623327')
-        setValue('username', accountDetail?.username || 'admin')
-        setValue('password', accountDetail?.password || 'abc@123')
+    if (!isEmpty(accountDetail)) {
+      setValue("fullName", accountDetail?.fullName || "Vũ Quý Tuấn")
+      setValue("dob", accountDetail?.dob || "27/06/2000")
+      setValue("email", accountDetail?.email || "abc@gmail.com")
+      setValue("phoneNumber", accountDetail?.phoneNumber || "0359623327")
+      setValue("username", accountDetail?.username || "admin")
+      setValue("password", accountDetail?.password || "abc@123")
     }
   }, [accountDetail])
 
-  const handleCreateAccount = () => {}
+  const handleCreateAccount = () => {
+    const formValue = getValues()
+    dispatch(
+      ManageActions.createAccountRequest({
+        data: formValue,
+        callback: (isSuccess) => {
+          if (isSuccess) {
+            navigate(ROUTE_PATH.MANAGE_ACCOUNT)
+          } else {
+            alert("Tạo mới không thành công!")
+          }
+        },
+      })
+    )
+  }
 
-  const handleUpdateAccount = () => {}
+  const handleUpdateAccount = () => {
+    const formValue = getValues()
+    const data = {
+      username: formValue?.username,
+      fullName: formValue?.fullName,
+      phoneNumber: formValue?.phoneNumber,
+      email: formValue?.email,
+      dob: formValue?.dob,
+      address: formValue?.address || 'a',
+    }
+    dispatch(
+      ManageActions.updateAccountRequest({
+        data: data,
+        callback: (isSuccess) => {
+          if (isSuccess) {
+            navigate(ROUTE_PATH.MANAGE_ACCOUNT)
+          } else {
+            alert("Cập nhật không thành công!")
+          }
+        },
+      })
+    )
+  }
 
   return (
     <Box sx={{ backgroundColor: "#fff", padding: 3, borderRadius: 3 }}>
@@ -94,7 +132,7 @@ const AccountForm = () => {
             <FormControl label="Ngày sinh" required paddingRight="0">
               <DatePicker
                 slotProps={{ textField: { size: "small" } }}
-                {...register("dob")}
+                // {...register("dob")}
                 autoFocus={true}
                 placeholder="Nhập mô tả"
               />

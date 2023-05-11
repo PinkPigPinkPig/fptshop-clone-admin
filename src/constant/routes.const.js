@@ -7,6 +7,7 @@ export const ROUTE_PATH = {
   CREATE_PRODUCT: '/manage-product/create-product',
   UPDATE_PRODUCT: '/manage-product/update-product/:id',
   MANAGE_USER: '/manage-user',
+  USER_DETAIL: '/manage-user/detail/:id',
   MANAGE_ORDER: '/manage-order',
   ORDER_DETAIL: '/manage-order/detail/:id',
   MANAGE_ACCOUNT: '/manage-account',

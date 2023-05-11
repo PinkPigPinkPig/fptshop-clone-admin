@@ -32,6 +32,8 @@ export function* watchManageSaga() {
     takeLatest(ManageActions.createAccountRequest.type, handleCreateAccount),
     takeLatest(ManageActions.updateAccountRequest.type, handleUpdateAccount),
     takeLatest(ManageActions.deleteAccountRequest.type, handleDeleteAccount),
+    takeLatest(ManageActions.getUserListRequest.type, handleGetUserList),
+    takeLatest(ManageActions.getUserDetailRequest.type, handleGetUserDetail),
   ])
 }
 
@@ -260,7 +262,7 @@ function* handleUpdateAccount(action) {
   try {
     const api = () =>
       ApiUtil.fetch(ApiConfig.ACCOUNT, {
-        method: "POST",
+        method: "PUT",
         data,
       })
     const response = yield call(api)
@@ -273,15 +275,47 @@ function* handleUpdateAccount(action) {
 
 function* handleDeleteAccount(action) {
   const { data, callback } = action.payload
+  console.log({data})
   try {
     const api = () =>
-      ApiUtil.fetch(ApiConfig.ACCOUNT, {
+      ApiUtil.fetch(ApiConfig.ACCOUNT + `/${data?.username}`, {
         method: "DELETE",
-        data,
       })
     const response = yield call(api)
     const isSuccess = response?.code === 200
     callback && callback(isSuccess)
+  } catch (error) {
+    console.log("error", error)
+  }
+}
+
+function* handleGetUserList(action) {
+  const { params, callback } = action.payload
+  try {
+    const api = () =>
+      ApiUtil.fetch(ApiConfig.GET_USER_LIST, {
+        method: "GET",
+        params,
+      })
+    const response = yield call(api)
+    const isSuccess = response?.code === 200
+    callback && callback(response?.data)
+  } catch (error) {
+    console.log("error", error)
+  }
+}
+
+function* handleGetUserDetail(action) {
+  const { params, callback } = action.payload
+  try {
+    const api = () =>
+      ApiUtil.fetch(ApiConfig.USER, {
+        method: "GET",
+        params
+      })
+    const response = yield call(api)
+    const isSuccess = response?.code === 200
+    callback && callback(response?.data)
   } catch (error) {
     console.log("error", error)
   }

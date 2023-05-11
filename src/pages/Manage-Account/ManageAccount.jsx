@@ -1,7 +1,8 @@
-import { Box, Button, Stack } from "@mui/material"
+import { Box, Button, Stack, Modal, Typography } from "@mui/material"
 import { DataGrid } from "@mui/x-data-grid"
 import { ManageActions } from "ReduxSaga/Manage/ManageRedux"
 import { ROUTE_PATH } from "constant/routes.const"
+import { sortBy } from "lodash"
 import React from "react"
 import { useEffect } from "react"
 import { useState } from "react"
@@ -10,6 +11,8 @@ import { Link, useNavigate } from "react-router-dom"
 
 const ManageAccount = () => {
   const [accountList, setAccountList] = useState([])
+  const [openDeleteModal, setOpenDeleteModal] = useState(false)
+  const [username, setUsername] = useState('')
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -108,7 +111,12 @@ const ManageAccount = () => {
             >
               Edit
             </Link>
-            <Link to="#" onClick={() => {}}>
+            <Link
+              to="#"
+              onClick={() => {
+                handleClickDelete(params)
+              }}
+            >
               Delete
             </Link>
           </Stack>
@@ -117,12 +125,22 @@ const ManageAccount = () => {
     },
   ]
 
+  const handleClickDelete = (params) => {
+    console.log({params})
+    setUsername(params?.row?.username)
+    setOpenDeleteModal(true)
+  }
+
   const handleClickCreate = () => {
     navigate(ROUTE_PATH.CREATE_ACCOUNT, {
       state: {
         isUpdate: false,
       },
     })
+  }
+
+  const closeModal = (params) => {
+    setOpenDeleteModal(false)
   }
 
   return (
@@ -134,7 +152,7 @@ const ManageAccount = () => {
       </Box>
       <Box>
         <DataGrid
-          rows={accountList?.sort((a, b) => a?.id - b?.id)}
+          rows={sortBy(accountList, ["id"])}
           columns={COLUMNS}
           pageSize={10}
           rowsPerPageOptions={[10, 25, 50]}
@@ -149,8 +167,63 @@ const ManageAccount = () => {
           disableSelectionOnClick
         />
       </Box>
+      <Modal
+        open={openDeleteModal}
+        onClose={closeModal}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <Stack spacing={5} alignItems="center">
+            <Typography variant="h6" sx={{ margin: 0 }}>
+              {`Bạn có chắc chắn muốn xóa sản phẩm?`}
+            </Typography>
+            <Stack spacing={2}>
+              <Button
+                variant="contained"
+                color="error"
+                fullWidth
+                onClick={() => {
+                  dispatch(
+                    ManageActions.deleteAccountRequest({
+                      data: {
+                        username
+                      },
+                      callback: (isSuccess) => {
+                        if (isSuccess) {
+                          const arr = accountList.filter(
+                            (item) => item?.username != username
+                          )
+                          setAccountList(arr)
+                        }
+                        closeModal()
+                      },
+                    })
+                  )
+                }}
+              >
+                Có
+              </Button>
+              <Button variant="contained" fullWidth onClick={closeModal}>
+                Không
+              </Button>
+            </Stack>
+          </Stack>
+        </Box>
+      </Modal>
     </Box>
   )
 }
 
 export default ManageAccount
+
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 500,
+  bgcolor: "#FFF",
+  boxShadow: 24,
+  p: 4,
+}

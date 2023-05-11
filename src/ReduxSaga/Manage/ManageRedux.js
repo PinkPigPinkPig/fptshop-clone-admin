@@ -24,6 +24,9 @@ const manageRedux = createSlice({
         createAccountRequest: (state, action) => {},
         updateAccountRequest: (state, action) => {},
         deleteAccountRequest: (state, action) => {},
+
+        getUserListRequest: (state, action) => {},
+        getUserDetailRequest:(state, action) => {},
     }
 })
 

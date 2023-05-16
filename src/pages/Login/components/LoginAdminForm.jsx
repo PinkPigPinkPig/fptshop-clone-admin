@@ -118,10 +118,10 @@ const LoginAdminForm = () => {
                   {isWrong && <Typography color={'red'}>Sai tài khoản hoặc mật khẩu</Typography>}
                 </div>
               </div>
-              <Stack direction='row' justifyContent='space-between'>
+              {/* <Stack direction='row' justifyContent='space-between'>
                 <Link to={ROUTE_PATH.SIGN_UP}>Đăng ký tài khoản</Link>
-                {/* <Link to={ROUTE_PATH.FORGOT_PASSWORD}>Quên mật khẩu</Link> */}
-              </Stack>
+                <Link to={ROUTE_PATH.FORGOT_PASSWORD}>Quên mật khẩu</Link>
+              </Stack> */}
               <Button
                 onClick={handleLogin}
                 variant='contained'

@@ -203,7 +203,7 @@ const ProductForm = () => {
         data,
         callback: (isSuccess) => {
           if (isSuccess) {
-            navigate(ROUTE_PATH.MANAGE_ORDER)
+            navigate(ROUTE_PATH.MANAGE_PRODUCT)
           } else {
             alert("Tạo mới không thành công!")
           }
@@ -221,7 +221,7 @@ const ProductForm = () => {
         data: { ...data, id: productId },
         callback: (isSuccess) => {
           if (isSuccess) {
-            navigate(ROUTE_PATH.MANAGE_ORDER)
+            navigate(ROUTE_PATH.MANAGE_PRODUCT)
           } else {
             alert("Cập nhật không thành công!")
           }

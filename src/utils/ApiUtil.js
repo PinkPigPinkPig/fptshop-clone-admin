@@ -40,6 +40,7 @@ class ApiUtil {
         data
       )
       if (response.status == 403) {
+        console.log("loss")
         localStorageHelper.removeItem(LOCAL_STORE.TOKEN)
       }
       if (data && data.code === 200) {

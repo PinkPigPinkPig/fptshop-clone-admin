@@ -6,11 +6,20 @@ import {
   InputLabel,
   MenuItem,
   Modal,
+  Paper,
   Select,
   Stack,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TablePagination,
+  TableRow,
+  Typography,
 } from "@mui/material"
 import { DataGrid } from "@mui/x-data-grid"
-import React, { useEffect, useState } from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import { useDispatch } from "react-redux"
 import { ManageActions } from "../../ReduxSaga/Manage/ManageRedux"
 import { fakeData } from "./config"
@@ -28,14 +37,24 @@ const ManageProduct = () => {
   const [categoryList, setCategoryList] = useState([])
   const [openDeleteModal, setOpenDeleteModal] = useState(false)
   const [deletedId, setDeletedId] = useState()
-  const [tableData, setTableData] = useState({
-    content: [],
-    pageSize: 10,
-  })
-  const [paginationModel, setPaginationModel] = React.useState({
-    pageSize: 25,
-    page: 0,
-  })
+  const [loading, setLoading] = useState(false)
+  const [tableData, setTableData] = useState({})
+  const [page, setPage] = React.useState(0)
+  const [rowsPerPage, setRowsPerPage] = React.useState(10)
+  const [searchParams, setSearchParams] = useState({})
+
+  const handleChangePage = (event, newPage) => {
+    const params = {...searchParams, page: newPage}
+    setPage(newPage)
+    fetchProductList(params)
+  }
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(+event.target.value)
+    setPage(0)
+    const params = {...searchParams, page: 0, pageSize: +event.target.value}
+    fetchProductList(params)
+  }
 
   const navigate = useNavigate()
 
@@ -49,20 +68,23 @@ const ManageProduct = () => {
 
   useEffect(() => {
     if (category) {
-      dispatch(
-        ManageActions.getProductByCategoryRequest({
-          params: {
-            categoryId: category,
-          },
-          callback: (res) => {
-            if (res) {
-              setTableData(res)
-            }
-          },
-        })
-      )
+      fetchProductList({ categoryId: category, pageSize: rowsPerPage })
     }
   }, [category])
+
+  const fetchProductList = (params) => {
+    setSearchParams(params)
+    dispatch(
+      ManageActions.getProductByCategoryRequest({
+        params: params,
+        callback: (res) => {
+          if (res) {
+            setTableData(res)
+          }
+        },
+      })
+    )
+  }
 
   const handleChange = (event) => {
     setCategory(event.target.value)
@@ -77,82 +99,11 @@ const ManageProduct = () => {
     })
   }
 
-  const TABLE_COLUMNS = [
-    { field: PFN.ID, headerName: "STT", width: 60, sortable: false },
-    {
-      field: PFN.PRODUCT_NAME,
-      headerName: "Tên sản phẩm",
-      width: 250,
-      sortable: false,
-    },
-    // { field: "modelSeries", headerName: "Loại sản phẩm" },
-    {
-      field: PFN.MODEL_SERIES,
-      headerName: "Dòng sản phẩm",
-      width: 150,
-      sortable: false,
-    },
-    {
-      field: PFN.BRAND.ID,
-      headerName: "Nhãn hiệu",
-      width: 120,
-      sortable: false,
-      renderCell: (params) => {
-        return params?.row?.brand?.brandName
-      },
-    },
-    {
-      field: PFN.PRICE,
-      headerName: "Giá tiền",
-      width: 150,
-      sortable: false,
-      renderCell: (params) => {
-        return moneyConvert(params?.value)
-      },
-    },
-    {
-      field: PFN.TOTAL_PRODUCT,
-      headerName: "Số lượng",
-      width: 150,
-      sortable: false,
-      // renderCell: (params) => {
-      //   return (params?.value) + '%'
-      // },
-    },
-    {
-      field: PFN.DESCRIPTION,
-      headerName: "Mô tả",
-      width: 200,
-      sortable: false,
-    },
-    {
-      field: "action",
-      headerName: "Action",
-      sortable: false,
-      fixed: "right",
-      renderCell: (params) => {
-        return (
-          <Stack direction="row" spacing={2}>
-            <Link
-              to={`/manage-product/update-product/${params?.row?.id}`}
-              state={{ product: params?.row, isCreate: false }}
-            >
-              Edit
-            </Link>
-            <Link to="#" onClick={() => handleClickDelete(params)}>
-              Delete
-            </Link>
-          </Stack>
-        )
-      },
-    },
-  ]
-
   const handleClickDelete = (params) => {
-    if (params?.row?.totalProduct) {
+    if (params?.totalProduct) {
       alert("Không thể xóa vì sản phẩm vẫn tồn tại trong kho")
     } else {
-      setDeletedId(params?.row?.id)
+      setDeletedId(params?.id)
       setOpenDeleteModal(true)
     }
   }
@@ -197,33 +148,75 @@ const ManageProduct = () => {
         </Box>
       </Stack>
       <Box>
-        <DataGrid
-          rows={tableData?.content}
-          columns={TABLE_COLUMNS}
-          localeText={{
-            footerRowSelected: (count) => `Đã chọn ${count} bản ghi`,
-            noRowsLabel: "Không có dữ liệu",
-          }}
-          pageSize={10}
-          rowsPerPageOptions={[10, 25, 50]}
-          componentsProps={{
-            pagination: {
-              labelRowsPerPage: "Số bản ghi mỗi trang",
-            },
-          }}
-          disableColumnFilter
-          disableColumnMenu
-          disableSelectionOnClick
-          keepNonExistentRowsSelected
-          autoHeight
-          // components={{
-          //   NoRowsOverlay: () => (
-          //     <Stack height="100%" alignItems="center" justifyContent="center">
-          //       {NO_CORRESPONDING_DATA}
-          //     </Stack>
-          //   ),
-          // }}
-          // getRowId
+        <TableContainer component={Paper}>
+          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell style={{ minWidth: 60 }} width={60}>
+                  STT
+                </TableCell>
+                <TableCell style={{ minWidth: 250 }} width={250}>
+                  Tên sản phẩm
+                </TableCell>
+                <TableCell style={{ minWidth: 150 }} width={150}>
+                  Dòng sản phẩm
+                </TableCell>
+                <TableCell style={{ minWidth: 120 }} width={120}>
+                  Nhãn hiệu
+                </TableCell>
+                <TableCell style={{ minWidth: 150 }} width={150}>
+                  Giá tiền
+                </TableCell>
+                <TableCell style={{ minWidth: 150 }} width={150}>
+                  Số lượng
+                </TableCell>
+                <TableCell style={{ minWidth: 300 }} width={500}>
+                  Mô tả
+                </TableCell>
+                <TableCell fixed="right" sticky>
+                  Action
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {tableData?.content?.map((row, index) => (
+                <TableRow
+                  key={row?.id}
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                  <TableCell>{index + 1}</TableCell>
+                  <TableCell>{row?.[PFN.PRODUCT_NAME]}</TableCell>
+                  <TableCell>{row?.[PFN.MODEL_SERIES]}</TableCell>
+                  <TableCell>{row?.brand?.brandName}</TableCell>
+                  <TableCell>{moneyConvert(row?.[PFN.PRICE])}</TableCell>
+                  <TableCell>{row?.[PFN.TOTAL_PRODUCT]}</TableCell>
+                  <TableCell>{row?.[PFN.DESCRIPTION]}</TableCell>
+                  <TableCell>
+                    <Stack direction="row" spacing={2}>
+                      <Link
+                        to={`/manage-product/update-product/${row?.id}`}
+                        state={{ product: row, isCreate: false }}
+                      >
+                        Edit
+                      </Link>
+                      <Link to="#" onClick={() => handleClickDelete(row)}>
+                        Delete
+                      </Link>
+                    </Stack>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <TablePagination
+          rowsPerPageOptions={[10, 15, 20]}
+          component="div"
+          count={tableData?.totalElements}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Box>
       <Modal

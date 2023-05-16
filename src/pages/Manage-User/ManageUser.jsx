@@ -1,4 +1,14 @@
-import { Box } from "@mui/material"
+import {
+  Box,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TablePagination,
+  TableRow,
+} from "@mui/material"
 import { DataGrid } from "@mui/x-data-grid"
 import { ManageActions } from "ReduxSaga/Manage/ManageRedux"
 import { sortBy } from "lodash"
@@ -8,24 +18,45 @@ import { useDispatch } from "react-redux"
 import { useNavigate } from "react-router-dom"
 
 const ManageUser = () => {
-  const [userList, setUserList] = useState([])
+  const [tableData, setTableData] = useState({})
+  const [page, setPage] = React.useState(0)
+  const [rowsPerPage, setRowsPerPage] = React.useState(10)
+  const [searchParams, setSearchParams] = useState({})
+
+  const handleChangePage = (event, newPage) => {
+    const params = { ...searchParams, page: newPage }
+    setPage(newPage)
+    fetchUserList(params)
+  }
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(+event.target.value)
+    setPage(0)
+    const params = { ...searchParams, page: 0, pageSize: +event.target.value }
+    fetchUserList(params)
+  }
 
   const dispatch = useDispatch()
 
   const navigate = useNavigate()
 
   useEffect(() => {
+    fetchUserList({ pageSize: rowsPerPage })
+  }, [])
+
+  const fetchUserList = (params) => {
+    setSearchParams(params)
     dispatch(
       ManageActions.getUserListRequest({
-        data: {},
+        params: params,
         callback: (res) => {
           if (res) {
-            setUserList(res?.content)
+            setTableData(res)
           }
         },
       })
     )
-  }, [])
+  }
 
   const COLUMNS = [
     {
@@ -89,35 +120,50 @@ const ManageUser = () => {
   return (
     <Box sx={{ backgroundColor: "#fff", padding: 3, borderRadius: 3 }}>
       <Box>
-        <DataGrid
-          rows={sortBy(userList, ["id"])}
-          columns={COLUMNS}
-          pageSize={10}
-          rowsPerPageOptions={[10, 25, 50]}
-          componentsProps={{
-            pagination: {
-              labelRowsPerPage: "Số bản ghi mỗi trang",
-            },
-          }}
-          autoHeight
-          disableColumnFilter
-          disableColumnMenu
-          disableSelectionOnClick
-          onRowClick={(params) => {
-            navigate(`/manage-user/detail/${params?.row?.id}`, {
-              state: { user: params?.row },
-            })
-          }}
-          sx={{
-            // disable cell selection style
-            ".MuiDataGrid-cell:focus": {
-              outline: "none",
-            },
-            // pointer cursor on ALL rows
-            "& .MuiDataGrid-row:hover": {
-              cursor: "pointer",
-            },
-          }}
+        <TableContainer component={Paper}>
+          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                {COLUMNS?.map((column) => (
+                  <TableCell
+                    key={column?.field}
+                    style={{ minWidth: column?.width }}
+                  >
+                    {column?.headerName}
+                  </TableCell>
+                ))}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {tableData?.content?.map((row, index) => (
+                <TableRow
+                  key={row?.id}
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 }, cursor: 'pointer', "&:hover": {backgroundColor: '#def6fa'} }}
+                  onClick={() =>
+                    navigate(`/manage-user/detail/${row?.id}`, {
+                      state: { user: row },
+                    })
+                  }
+                >
+                  <TableCell>{index + 1}</TableCell>
+                  <TableCell>{row?.fullName}</TableCell>
+                  <TableCell>{row?.dob}</TableCell>
+                  <TableCell>{row?.email}</TableCell>
+                  <TableCell>{row?.phoneNumber}</TableCell>
+                  <TableCell>{row?.address}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <TablePagination
+          rowsPerPageOptions={[10, 15, 20]}
+          component="div"
+          count={tableData?.totalElements}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Box>
     </Box>

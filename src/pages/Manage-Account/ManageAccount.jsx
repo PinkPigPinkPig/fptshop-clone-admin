@@ -1,4 +1,18 @@
-import { Box, Button, Stack, Modal, Typography } from "@mui/material"
+import {
+  Box,
+  Button,
+  Stack,
+  Modal,
+  Typography,
+  TablePagination,
+  TableContainer,
+  Paper,
+  Table,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody,
+} from "@mui/material"
 import { DataGrid } from "@mui/x-data-grid"
 import { ManageActions } from "ReduxSaga/Manage/ManageRedux"
 import { ROUTE_PATH } from "constant/routes.const"
@@ -10,26 +24,46 @@ import { useDispatch } from "react-redux"
 import { Link, useNavigate } from "react-router-dom"
 
 const ManageAccount = () => {
-  const [accountList, setAccountList] = useState([])
   const [openDeleteModal, setOpenDeleteModal] = useState(false)
-  const [username, setUsername] = useState('')
+  const [username, setUsername] = useState("")
+  const [tableData, setTableData] = useState({})
+  const [page, setPage] = React.useState(0)
+  const [rowsPerPage, setRowsPerPage] = React.useState(10)
+  const [searchParams, setSearchParams] = useState({})
+
+  const handleChangePage = (event, newPage) => {
+    const params = { ...searchParams, page: newPage }
+    setPage(newPage)
+    fetchAccountList(params)
+  }
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(+event.target.value)
+    setPage(0)
+    const params = { ...searchParams, page: 0, pageSize: +event.target.value }
+    fetchAccountList(params)
+  }
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
   useEffect(() => {
+    fetchAccountList({pageSize: rowsPerPage})
+  }, [])
+
+  const fetchAccountList = (params) => {
+    setSearchParams(params)
     dispatch(
       ManageActions.getAccountListRequest({
-        params: {},
+        params: params,
         callback: (res) => {
-          if (res?.content) {
-            console.log({ res })
-            setAccountList(res?.content)
+          if (res) {
+            setTableData(res)
           }
         },
       })
     )
-  }, [])
+  }
 
   const COLUMNS = [
     {
@@ -126,8 +160,8 @@ const ManageAccount = () => {
   ]
 
   const handleClickDelete = (params) => {
-    console.log({params})
-    setUsername(params?.row?.username)
+    console.log({ params })
+    setUsername(params?.username)
     setOpenDeleteModal(true)
   }
 
@@ -151,20 +185,64 @@ const ManageAccount = () => {
         </Button>
       </Box>
       <Box>
-        <DataGrid
-          rows={sortBy(accountList, ["id"])}
-          columns={COLUMNS}
-          pageSize={10}
-          rowsPerPageOptions={[10, 25, 50]}
-          componentsProps={{
-            pagination: {
-              labelRowsPerPage: "Số bản ghi mỗi trang",
-            },
-          }}
-          autoHeight
-          disableColumnFilter
-          disableColumnMenu
-          disableSelectionOnClick
+        <TableContainer component={Paper}>
+          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                {COLUMNS?.map((column) => (
+                  <TableCell
+                    key={column?.field}
+                    style={{ minWidth: column?.width }}
+                  >
+                    {column?.headerName}
+                  </TableCell>
+                ))}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {tableData?.content?.map((row, index) => (
+                <TableRow
+                  key={row?.id}
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                  <TableCell>{index + 1}</TableCell>
+                  <TableCell>{row?.fullName}</TableCell>
+                  <TableCell>{row?.dob}</TableCell>
+                  <TableCell>{row?.email}</TableCell>
+                  <TableCell>{row?.phoneNumber}</TableCell>
+                  <TableCell>{row?.username}</TableCell>
+                  <TableCell>{row?.password}</TableCell>
+                  <TableCell>
+                    <Stack direction="row" spacing={2}>
+                      <Link
+                        to={`/manage-account/update-account/${row?.username}`}
+                        state={{ account: row, isUpdate: true }}
+                      >
+                        Edit
+                      </Link>
+                      <Link
+                        to="#"
+                        onClick={() => {
+                          handleClickDelete(row)
+                        }}
+                      >
+                        Delete
+                      </Link>
+                    </Stack>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <TablePagination
+          rowsPerPageOptions={[10, 15, 20]}
+          component="div"
+          count={tableData?.totalElements}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Box>
       <Modal
@@ -187,14 +265,15 @@ const ManageAccount = () => {
                   dispatch(
                     ManageActions.deleteAccountRequest({
                       data: {
-                        username
+                        username,
                       },
                       callback: (isSuccess) => {
                         if (isSuccess) {
-                          const arr = accountList.filter(
+                          const arr = tableData?.content?.filter(
                             (item) => item?.username != username
                           )
-                          setAccountList(arr)
+                          const data = {...tableData, content: arr}
+                          setTableData(data)
                         }
                         closeModal()
                       },

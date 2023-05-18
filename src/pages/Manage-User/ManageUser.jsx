@@ -161,7 +161,7 @@ const ManageUser = () => {
                   >
                     <TableCell>{index + 1}</TableCell>
                     <TableCell>{row?.fullName}</TableCell>
-                    <TableCell>{row?.dob}</TableCell>
+                    <TableCell>{row?.dob?.join('-')}</TableCell>
                     <TableCell>{row?.email}</TableCell>
                     <TableCell>{row?.phoneNumber}</TableCell>
                     <TableCell>{row?.address}</TableCell>

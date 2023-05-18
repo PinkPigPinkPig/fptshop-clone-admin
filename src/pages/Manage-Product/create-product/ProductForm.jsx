@@ -309,25 +309,14 @@ const ProductForm = () => {
               label="Model Series"
               required
               paddingRight="0"
-              disabled={isEmpty(modelList)}
             >
-              <InputSelect
-                control={control}
-                name={PFN.MODEL_SERIES}
-                label="Chọn series"
-                errorMes={errors?.[PFN.MODEL_SERIES]?.message}
-                // onChange={(event) => {
-                //   console.log(event.target.value)
-                // }}
-              >
-                {modelList?.map((item, index) => {
-                  return (
-                    <MenuItem key={item?.id} value={item?.modelSeries}>
-                      {item?.modelSeries}
-                    </MenuItem>
-                  )
-                })}
-              </InputSelect>
+              <TextField
+                size="small"
+                hiddenLabel
+                {...register(PFN.MODEL_SERIES)}
+                autoFocus={true}
+                placeholder="Nhập tên model"
+              />
             </FormControl>
           </Box>
         </FlexRow>
@@ -340,15 +329,7 @@ const ProductForm = () => {
                 {...register(PFN.PRODUCT_NAME)}
                 autoFocus={true}
                 placeholder="Nhập tên sản phẩm"
-                //   inputProps={{
-                //     maxLength: MAX_LENGTH.name
-                //   }}
-                // error={Boolean(errors?.[PFN.PRODUCT_NAME])}
-                // helperText={errors?.[PFN.PRODUCT_NAME]?.message}
               />
-              {/* <TextHelper>
-                {(watch(PFN.PRODUCT_NAME)?.length || 0) + "/" + 0}
-              </TextHelper> */}
             </FormControl>
           </Box>
           <Box width={"50%"}>

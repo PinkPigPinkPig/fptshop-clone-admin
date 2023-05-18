@@ -1,13 +1,15 @@
 import { Box, Button, Divider, Stack, TextField } from "@mui/material"
-import { DatePicker } from "@mui/x-date-pickers"
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers"
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs"
 import { ManageActions } from "ReduxSaga/Manage/ManageRedux"
 import { FormControl, Title } from "components"
 import { FlexRow, FormLayout } from "components/Layout/Layout"
 import { ROUTE_PATH } from "constant/routes.const"
+import dayjs from "dayjs"
 import { isEmpty } from "lodash"
 import React, { useEffect } from "react"
 import { useState } from "react"
-import { useForm } from "react-hook-form"
+import { useForm, Controller } from "react-hook-form"
 import { useDispatch } from "react-redux"
 import { useLocation, useNavigate } from "react-router-dom"
 
@@ -62,12 +64,13 @@ const AccountForm = () => {
 
   useEffect(() => {
     if (!isEmpty(accountDetail)) {
-      setValue("fullName", accountDetail?.fullName || "Vũ Quý Tuấn")
-      setValue("dob", accountDetail?.dob || "27/06/2000")
-      setValue("email", accountDetail?.email || "abc@gmail.com")
-      setValue("phoneNumber", accountDetail?.phoneNumber || "0359623327")
-      setValue("username", accountDetail?.username || "admin")
-      setValue("password", accountDetail?.password || "abc@123")
+      setValue("fullName", accountDetail?.fullName || "")
+      setValue("dob", dayjs(accountDetail?.dob?.join("/")) || "")
+      setValue("email", accountDetail?.email || "")
+      setValue("phoneNumber", accountDetail?.phoneNumber || "")
+      setValue("username", accountDetail?.username || "")
+      setValue("password", accountDetail?.password || "")
+      setValue("address", accountDetail?.address || "")
     }
   }, [accountDetail])
 
@@ -94,8 +97,9 @@ const AccountForm = () => {
       fullName: formValue?.fullName,
       phoneNumber: formValue?.phoneNumber,
       email: formValue?.email,
-      dob: formValue?.dob,
-      address: formValue?.address || 'a',
+      dob: dayjs(formValue?.dob).format("YYYY-MM-DD"),
+      address: formValue?.address,
+      password: formValue?.password,
     }
     dispatch(
       ManageActions.updateAccountRequest({
@@ -130,12 +134,32 @@ const AccountForm = () => {
           </Box>
           <Box width={"50%"}>
             <FormControl label="Ngày sinh" required paddingRight="0">
-              <DatePicker
-                slotProps={{ textField: { size: "small" } }}
-                // {...register("dob")}
-                autoFocus={true}
-                placeholder="Nhập mô tả"
-              />
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <Controller
+                  control={control}
+                  name="dob"
+                  render={({
+                    field: { onChange, onBlur, value, name, ref },
+                    formState,
+                  }) => (
+                    <DatePicker
+                      format="YYYY/MM/DD"
+                      slotProps={{
+                        textField: {
+                          size: "small",
+                          error: !isEmpty(errors?.["dob"]),
+                          helperText: errors?.["dob"]?.message,
+                        },
+                      }}
+                      value={value}
+                      onChange={onChange}
+                      error={!isEmpty(errors?.["dob"])}
+                      helperText={errors?.["dob"]?.message}
+                      renderInput={(params) => <TextField {...params} />}
+                    />
+                  )}
+                />
+              </LocalizationProvider>
             </FormControl>
           </Box>
         </FlexRow>
@@ -165,13 +189,19 @@ const AccountForm = () => {
         </FlexRow>
         <FlexRow>
           <Box width={"50%"}>
-            <FormControl label="Tên đăng nhập" required paddingLeft="0">
+            <FormControl
+              label="Tên đăng nhập"
+              required
+              paddingLeft="0"
+              disabled={isUpdate}
+            >
               <TextField
                 size="small"
                 hiddenLabel
                 {...register("username")}
                 autoFocus={true}
                 placeholder="Nhập tên đăng nhập"
+                disabled={isUpdate}
               />
             </FormControl>
           </Box>
@@ -183,6 +213,19 @@ const AccountForm = () => {
                 {...register("password")}
                 autoFocus={true}
                 placeholder="Nhập mật khẩu"
+              />
+            </FormControl>
+          </Box>
+        </FlexRow>
+        <FlexRow>
+          <Box width={"50%"}>
+            <FormControl label="Địa chỉ" required paddingLeft="0">
+              <TextField
+                size="small"
+                hiddenLabel
+                {...register("address")}
+                autoFocus={true}
+                placeholder="Nhập địa chỉ"
               />
             </FormControl>
           </Box>

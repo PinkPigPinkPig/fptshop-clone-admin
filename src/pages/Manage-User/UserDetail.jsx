@@ -1,12 +1,14 @@
 import { Box, Divider, TextField, Stack, Button } from "@mui/material"
-import { DatePicker } from "@mui/x-date-pickers"
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers"
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs"
 import { ManageActions } from "ReduxSaga/Manage/ManageRedux"
 import { FormControl, Title } from "components"
 import { FlexRow, FormLayout } from "components/Layout/Layout"
 import { ROUTE_PATH } from "constant/routes.const"
+import dayjs from "dayjs"
 import { isEmpty } from "lodash"
 import React, { useEffect, useState } from "react"
-import { useForm } from "react-hook-form"
+import { Controller, useForm } from "react-hook-form"
 import { useDispatch } from "react-redux"
 import { useLocation, useNavigate } from "react-router-dom"
 
@@ -57,11 +59,11 @@ const UserDetail = () => {
 
   useEffect(() => {
     if (!isEmpty(userDetail)) {
-      setValue("fullName", userDetail?.fullName || "Vũ Quý Tuấn")
-      setValue("dob", userDetail?.dob || "27/06/2000")
-      setValue("email", userDetail?.email || "abc@gmail.com")
-      setValue("phoneNumber", userDetail?.phoneNumber || "0359623327")
-      setValue("address", userDetail?.address || "Hà Nội")
+      setValue("fullName", userDetail?.fullName || "")
+      setValue("dob", dayjs(userDetail?.dob?.join('/'))  || "")
+      setValue("email", userDetail?.email || "")
+      setValue("phoneNumber", userDetail?.phoneNumber || "")
+      setValue("address", userDetail?.address || "")
     }
   }, [userDetail])
 
@@ -85,13 +87,32 @@ const UserDetail = () => {
           </Box>
           <Box width={"50%"}>
             <FormControl label="Ngày sinh" required paddingRight="0">
-              <DatePicker
-                slotProps={{ textField: { size: "small" } }}
-                {...register("dob")}
-                autoFocus={true}
-                placeholder="Nhập mô tả"
-                disabled
-              />
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <Controller
+                  control={control}
+                  name="dob"
+                  render={({
+                    field: { onChange, onBlur, value, name, ref },
+                    formState,
+                  }) => (
+                    <DatePicker
+                      format="YYYY/MM/DD"
+                      slotProps={{
+                        textField: {
+                          size: "small",
+                          error: !isEmpty(errors?.["dob"]),
+                          helperText: errors?.["dob"]?.message,
+                        },
+                      }}
+                      value={value}
+                      onChange={onChange}
+                      error={!isEmpty(errors?.["dob"])}
+                      helperText={errors?.["dob"]?.message}
+                      renderInput={(params) => <TextField {...params} />}
+                    />
+                  )}
+                />
+              </LocalizationProvider>
             </FormControl>
           </Box>
         </FlexRow>

@@ -230,7 +230,7 @@ const ManageOrder = () => {
                       <TableCell>{row?.recipientAddress}</TableCell>
                       <TableCell>{row?.itemQuantity}</TableCell>
                       <TableCell>{row?.totalAmount}</TableCell>
-                      <TableCell>{row?.paymentMethod}</TableCell>
+                      <TableCell>{findItemInOptions(row?.paymentMethod, PAYMENT_METHOD_LOV, 'value')?.label}</TableCell>
                       <TableCell>
                         <Button variant="text" color={status?.color}>
                           {status?.label}

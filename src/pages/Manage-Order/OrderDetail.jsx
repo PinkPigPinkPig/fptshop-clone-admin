@@ -99,10 +99,11 @@ const OrderDetail = () => {
             </FormControl>
           </Box>
           <Box width={"50%"}>
-            <FormControl label='Số lượng sản phẩm' required paddingRight='0'>
+            <FormControl label='Số lượng sản phẩm' required paddingRight='0' disabled>
               <TextField
                 size='small'
                 hiddenLabel
+                disabled
                 {...register(`orderDetails.${index}.quantity`)}
               />
             </FormControl>
@@ -129,7 +130,7 @@ const OrderDetail = () => {
     const formValue = getValues()
     const data = {
       customerId: orderDetail?.customerId,
-      orderId: orderDetail?.customerId,
+      orderId: orderDetail?.id,
       orderStatus: formValue?.orderStatus,
     }
     dispatch(

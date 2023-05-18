@@ -17,7 +17,7 @@ export const PAYMENT_METHOD_LOV = [
         value: 3,
     },
     {
-        label: 'Ví điện tử',
+        label: 'Bên thứ 3',
         value: 4,
     },
 ]

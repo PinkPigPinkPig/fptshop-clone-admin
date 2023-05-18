@@ -3,9 +3,28 @@ import { localStorageHelper } from "../helpers"
 import { CommonLayout } from "../layout/common"
 import { commonLayoutRoutesList, routesList } from "./config"
 import { ROUTE_PATH } from "constant/routes.const"
+import jwtDecode from "jwt-decode"
+import { LOCAL_STORE } from "constant/system.const"
 
 function PrivateOutlet() {
-  return localStorageHelper.isLogin() ? <Outlet /> : <Navigate to={ROUTE_PATH.LOGIN} />
+  const token = localStorageHelper.getItem(LOCAL_STORE.TOKEN)
+  const isTokenExpired = () => {
+    try {
+      const { exp } = jwtDecode(token)
+      const expirationTime = (exp * 1000) - 60000
+      console.log({exp, expirationTime})
+      return Date.now() > expirationTime
+    } catch (error) {
+      console.error("Error decoding token:", error)
+      return true // Assuming the token is expired if there's an error
+    }
+  }
+  console.log(isTokenExpired())
+  return !isTokenExpired() ? (
+    <Outlet />
+  ) : (
+    <Navigate to={ROUTE_PATH.LOGIN} />
+  )
 }
 export const AppRoutes = () => {
   return (
@@ -20,7 +39,7 @@ export const AppRoutes = () => {
           if (isProtected)
             return (
               <Route path={path} element={<PrivateOutlet />} key={i}>
-                <Route path='' element={element} />
+                <Route path="" element={element} />
               </Route>
             )
           return <Route key={i} path={path} element={element} />
@@ -30,7 +49,7 @@ export const AppRoutes = () => {
         if (isProtected)
           return (
             <Route path={path} element={<PrivateOutlet />} key={i}>
-              <Route path='' element={<Component />} />
+              <Route path="" element={<Component />} />
             </Route>
           )
         return (
@@ -39,7 +58,7 @@ export const AppRoutes = () => {
             path={path}
             element={
               // <CommonLayout>
-                <Component />
+              <Component />
               // </CommonLayout>
             }
           />

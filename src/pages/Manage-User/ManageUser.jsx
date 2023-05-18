@@ -8,17 +8,18 @@ import {
   TableHead,
   TablePagination,
   TableRow,
+  Typography,
 } from "@mui/material"
 import { DataGrid } from "@mui/x-data-grid"
 import { ManageActions } from "ReduxSaga/Manage/ManageRedux"
-import { sortBy } from "lodash"
+import { isEmpty, sortBy } from "lodash"
 import React, { useEffect } from "react"
 import { useState } from "react"
 import { useDispatch } from "react-redux"
 import { useNavigate } from "react-router-dom"
 
 const ManageUser = () => {
-  const [tableData, setTableData] = useState({})
+  const [tableData, setTableData] = useState({ content: [], totalElements: 0 })
   const [page, setPage] = React.useState(0)
   const [rowsPerPage, setRowsPerPage] = React.useState(10)
   const [searchParams, setSearchParams] = useState({})
@@ -135,24 +136,38 @@ const ManageUser = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {tableData?.content?.map((row, index) => (
-                <TableRow
-                  key={row?.id}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 }, cursor: 'pointer', "&:hover": {backgroundColor: '#def6fa'} }}
-                  onClick={() =>
-                    navigate(`/manage-user/detail/${row?.id}`, {
-                      state: { user: row },
-                    })
-                  }
-                >
-                  <TableCell>{index + 1}</TableCell>
-                  <TableCell>{row?.fullName}</TableCell>
-                  <TableCell>{row?.dob}</TableCell>
-                  <TableCell>{row?.email}</TableCell>
-                  <TableCell>{row?.phoneNumber}</TableCell>
-                  <TableCell>{row?.address}</TableCell>
+              {isEmpty(tableData?.content) ? (
+                <TableRow>
+                  <TableCell align="center" colSpan={COLUMNS.length}>
+                    <Box>
+                      <Typography>Không có dữ liệu</Typography>
+                    </Box>
+                  </TableCell>
                 </TableRow>
-              ))}
+              ) : (
+                tableData?.content?.map((row, index) => (
+                  <TableRow
+                    key={row?.id}
+                    sx={{
+                      "&:last-child td, &:last-child th": { border: 0 },
+                      cursor: "pointer",
+                      "&:hover": { backgroundColor: "#def6fa" },
+                    }}
+                    onClick={() =>
+                      navigate(`/manage-user/detail/${row?.id}`, {
+                        state: { user: row },
+                      })
+                    }
+                  >
+                    <TableCell>{index + 1}</TableCell>
+                    <TableCell>{row?.fullName}</TableCell>
+                    <TableCell>{row?.dob}</TableCell>
+                    <TableCell>{row?.email}</TableCell>
+                    <TableCell>{row?.phoneNumber}</TableCell>
+                    <TableCell>{row?.address}</TableCell>
+                  </TableRow>
+                ))
+              )}
             </TableBody>
           </Table>
         </TableContainer>

@@ -11,7 +11,7 @@ export const calculatePayMoney = (price, saleOff, num = 1) => {
   return result?.toLocaleString("it-IT", { style: "currency", currency: "VND" })
 }
 
-export const mapCreateData = (formValue, image) => {
+export const mapCreateData = (formValue, thumbnail, image) => {
   const PFN = PRODUCT_FIELD_NAME
   const data = {
     [PFN.PRODUCT_NAME]: formValue?.[PFN.PRODUCT_NAME],
@@ -22,6 +22,7 @@ export const mapCreateData = (formValue, image) => {
     [PFN.TOTAL_PRODUCT]: formValue?.[PFN.TOTAL_PRODUCT],
     [PFN.DESCRIPTION]: formValue?.[PFN.DESCRIPTION],
     [PFN.IMAGES]: image,
+    [PFN.THUMBNAIL]: thumbnail,
     [PFN.SPECIFICATION.SPECIFICATION]: {
       [PFN.SPECIFICATION.CPU]: formValue?.[PFN.SPECIFICATION.CPU],
       [PFN.SPECIFICATION.CORE]: formValue?.[PFN.SPECIFICATION.CORE],

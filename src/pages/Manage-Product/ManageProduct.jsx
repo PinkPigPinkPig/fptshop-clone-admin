@@ -25,7 +25,7 @@ import { ManageActions } from "../../ReduxSaga/Manage/ManageRedux"
 import { fakeData } from "./config"
 import { Link, useNavigate } from "react-router-dom"
 import { ROUTE_PATH } from "../../constant/routes.const"
-import { isNil } from "lodash"
+import { isEmpty, isNil } from "lodash"
 import { PRODUCT_FIELD_NAME } from "./create-product/fieldName"
 import { moneyConvert } from "utils/Ultilities"
 
@@ -38,13 +38,13 @@ const ManageProduct = () => {
   const [openDeleteModal, setOpenDeleteModal] = useState(false)
   const [deletedId, setDeletedId] = useState()
   const [loading, setLoading] = useState(false)
-  const [tableData, setTableData] = useState({})
+  const [tableData, setTableData] = useState({ content: [], totalElements: 0 })
   const [page, setPage] = React.useState(0)
   const [rowsPerPage, setRowsPerPage] = React.useState(10)
   const [searchParams, setSearchParams] = useState({})
 
   const handleChangePage = (event, newPage) => {
-    const params = {...searchParams, page: newPage}
+    const params = { ...searchParams, page: newPage }
     setPage(newPage)
     fetchProductList(params)
   }
@@ -52,7 +52,7 @@ const ManageProduct = () => {
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value)
     setPage(0)
-    const params = {...searchParams, page: 0, pageSize: +event.target.value}
+    const params = { ...searchParams, page: 0, size: +event.target.value }
     fetchProductList(params)
   }
 
@@ -68,7 +68,7 @@ const ManageProduct = () => {
 
   useEffect(() => {
     if (category) {
-      fetchProductList({ categoryId: category, pageSize: rowsPerPage })
+      fetchProductList({ categoryId: category, size: rowsPerPage })
     }
   }, [category])
 
@@ -179,33 +179,44 @@ const ManageProduct = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {tableData?.content?.map((row, index) => (
-                <TableRow
-                  key={row?.id}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                >
-                  <TableCell>{index + 1}</TableCell>
-                  <TableCell>{row?.[PFN.PRODUCT_NAME]}</TableCell>
-                  <TableCell>{row?.[PFN.MODEL_SERIES]}</TableCell>
-                  <TableCell>{row?.brand?.brandName}</TableCell>
-                  <TableCell>{moneyConvert(row?.[PFN.PRICE])}</TableCell>
-                  <TableCell>{row?.[PFN.TOTAL_PRODUCT]}</TableCell>
-                  <TableCell>{row?.[PFN.DESCRIPTION]}</TableCell>
-                  <TableCell>
-                    <Stack direction="row" spacing={2}>
-                      <Link
-                        to={`/manage-product/update-product/${row?.id}`}
-                        state={{ product: row, isCreate: false }}
-                      >
-                        Edit
-                      </Link>
-                      <Link to="#" onClick={() => handleClickDelete(row)}>
-                        Delete
-                      </Link>
-                    </Stack>
+              {isEmpty(tableData?.content) ? (
+                <TableRow>
+                  <TableCell align="center" colSpan={8}>
+                    <Box
+                    >
+                      <Typography>Không có dữ liệu</Typography>
+                    </Box>
                   </TableCell>
                 </TableRow>
-              ))}
+              ) : (
+                tableData?.content?.map((row, index) => (
+                  <TableRow
+                    key={row?.id}
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  >
+                    <TableCell>{index + 1}</TableCell>
+                    <TableCell>{row?.[PFN.PRODUCT_NAME]}</TableCell>
+                    <TableCell>{row?.[PFN.MODEL_SERIES]}</TableCell>
+                    <TableCell>{row?.brand?.brandName}</TableCell>
+                    <TableCell>{moneyConvert(row?.[PFN.PRICE])}</TableCell>
+                    <TableCell>{row?.[PFN.TOTAL_PRODUCT]}</TableCell>
+                    <TableCell>{row?.[PFN.DESCRIPTION]}</TableCell>
+                    <TableCell>
+                      <Stack direction="row" spacing={2}>
+                        <Link
+                          to={`/manage-product/update-product/${row?.id}`}
+                          state={{ product: row, isCreate: false }}
+                        >
+                          Edit
+                        </Link>
+                        <Link to="#" onClick={() => handleClickDelete(row)}>
+                          Delete
+                        </Link>
+                      </Stack>
+                    </TableCell>
+                  </TableRow>
+                ))
+              )}
             </TableBody>
           </Table>
         </TableContainer>

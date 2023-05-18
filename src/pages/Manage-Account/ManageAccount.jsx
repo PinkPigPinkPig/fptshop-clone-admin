@@ -16,7 +16,7 @@ import {
 import { DataGrid } from "@mui/x-data-grid"
 import { ManageActions } from "ReduxSaga/Manage/ManageRedux"
 import { ROUTE_PATH } from "constant/routes.const"
-import { sortBy } from "lodash"
+import { isEmpty, sortBy } from "lodash"
 import React from "react"
 import { useEffect } from "react"
 import { useState } from "react"
@@ -29,7 +29,10 @@ const ManageAccount = () => {
   const [tableData, setTableData] = useState({})
   const [page, setPage] = React.useState(0)
   const [rowsPerPage, setRowsPerPage] = React.useState(10)
-  const [searchParams, setSearchParams] = useState({})
+  const [searchParams, setSearchParams] = useState({
+    content: [],
+    totalElements: 0,
+  })
 
   const handleChangePage = (event, newPage) => {
     const params = { ...searchParams, page: newPage }
@@ -40,7 +43,7 @@ const ManageAccount = () => {
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value)
     setPage(0)
-    const params = { ...searchParams, page: 0, pageSize: +event.target.value }
+    const params = { ...searchParams, page: 0, size: +event.target.value }
     fetchAccountList(params)
   }
 
@@ -48,7 +51,7 @@ const ManageAccount = () => {
   const navigate = useNavigate()
 
   useEffect(() => {
-    fetchAccountList({pageSize: rowsPerPage})
+    fetchAccountList({ size: rowsPerPage })
   }, [])
 
   const fetchAccountList = (params) => {
@@ -189,14 +192,24 @@ const ManageAccount = () => {
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
               <TableRow>
-                {COLUMNS?.map((column) => (
-                  <TableCell
-                    key={column?.field}
-                    style={{ minWidth: column?.width }}
-                  >
-                    {column?.headerName}
-                  </TableCell>
-                ))}
+                {isEmpty(tableData?.content) ? (
+                  <TableRow>
+                    <TableCell align="center" colSpan={COLUMNS.length}>
+                      <Box>
+                        <Typography>Không có dữ liệu</Typography>
+                      </Box>
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  COLUMNS?.map((column) => (
+                    <TableCell
+                      key={column?.field}
+                      style={{ minWidth: column?.width }}
+                    >
+                      {column?.headerName}
+                    </TableCell>
+                  ))
+                )}
               </TableRow>
             </TableHead>
             <TableBody>
@@ -272,7 +285,7 @@ const ManageAccount = () => {
                           const arr = tableData?.content?.filter(
                             (item) => item?.username != username
                           )
-                          const data = {...tableData, content: arr}
+                          const data = { ...tableData, content: arr }
                           setTableData(data)
                         }
                         closeModal()

@@ -13,6 +13,7 @@ import {
   TableHead,
   TablePagination,
   TableRow,
+  Typography,
 } from "@mui/material"
 import { ManageActions } from "ReduxSaga/Manage/ManageRedux"
 import React, { useEffect, useState } from "react"
@@ -22,10 +23,11 @@ import { ORDER_STATUS_LOV } from "./config"
 import { findItemInOptions } from "utils/Ultilities"
 import { PAYMENT_METHOD_LOV } from "constant/system.const"
 import { useNavigate } from "react-router-dom"
+import { isEmpty } from "lodash"
 
 const ManageOrder = () => {
   const [orderStatus, setOrderStatus] = useState()
-  const [tableData, setTableData] = useState({})
+  const [tableData, setTableData] = useState({ content: [], totalElements: 0 })
   const [page, setPage] = React.useState(0)
   const [rowsPerPage, setRowsPerPage] = React.useState(10)
   const [searchParams, setSearchParams] = useState({})
@@ -33,7 +35,7 @@ const ManageOrder = () => {
   const handleChangePage = (event, newPage) => {
     const params = {
       ...searchParams,
-      pageable: { page: newPage },
+      page: newPage,
     }
     setPage(newPage)
     fetchOrderList(params)
@@ -44,7 +46,8 @@ const ManageOrder = () => {
     setPage(0)
     const params = {
       ...searchParams,
-      pageable: { size: +event.target.value, page: 0 },
+      size: +event.target.value,
+      page: 0,
     }
     fetchOrderList(params)
   }
@@ -58,21 +61,19 @@ const ManageOrder = () => {
   }
 
   useEffect(() => {
-    fetchOrderList({ pageable: { size: rowsPerPage }, request: {} })
+    fetchOrderList({ size: rowsPerPage })
   }, [])
 
   useEffect(() => {
-    fetchOrderList({
-      pageable: { size: rowsPerPage },
-      request: { orderStatus: orderStatus },
-    })
+    fetchOrderList({ size: rowsPerPage }, { orderStatus: orderStatus })
   }, [orderStatus])
 
-  const fetchOrderList = (params) => {
+  const fetchOrderList = (params, data = {}) => {
     setSearchParams(params)
     dispatch(
       ManageActions.getOrderRequest({
-        data: params,
+        params: params,
+        data: data,
         callback: (res) => {
           if (res) {
             setTableData(res)
@@ -194,59 +195,51 @@ const ManageOrder = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {tableData?.content?.map((row, index) => {
-                const status = findItemInOptions(
-                  row?.orderStatus,
-                  ORDER_STATUS_LOV,
-                  "value"
-                )
-                return (
-                  <TableRow
-                    key={row?.id}
-                    sx={{
-                      "&:last-child td, &:last-child th": { border: 0 },
-                      cursor: "pointer",
-                      "&:hover": { backgroundColor: "#def6fa" },
-                    }}
-                    onClick={() =>
-                      navigate(`/manage-order/detail/${row?.id}`, {
-                        state: { order: row },
-                      })
-                    }
-                  >
-                    <TableCell>{index + 1}</TableCell>
-                    <TableCell>{row?.recipientName}</TableCell>
-                    <TableCell>{row?.recipientPhone}</TableCell>
-                    <TableCell>{row?.recipientAddress}</TableCell>
-                    <TableCell>{row?.itemQuantity}</TableCell>
-                    <TableCell>{row?.totalAmount}</TableCell>
-                    <TableCell>{row?.paymentMethod}</TableCell>
-                    <TableCell>
-                      <Button variant="text" color={status?.color}>
-                        {status?.label}
-                      </Button>
-                    </TableCell>
-                    <TableCell>
-                      <Stack direction="row" spacing={2}>
-                        <Link
-                          to={`/manage-account/update-account/${row?.username}`}
-                          state={{ account: row, isUpdate: true }}
-                        >
-                          Edit
-                        </Link>
-                        <Link
-                          to="#"
-                          onClick={() => {
-                            handleClickDelete(row)
-                          }}
-                        >
-                          Delete
-                        </Link>
-                      </Stack>
-                    </TableCell>
-                  </TableRow>
-                )
-              })}
+              {isEmpty(tableData?.content) ? (
+                <TableRow>
+                  <TableCell align="center" colSpan={COLUMNS.length}>
+                    <Box>
+                      <Typography>Không có dữ liệu</Typography>
+                    </Box>
+                  </TableCell>
+                </TableRow>
+              ) : (
+                tableData?.content?.map((row, index) => {
+                  const status = findItemInOptions(
+                    row?.orderStatus,
+                    ORDER_STATUS_LOV,
+                    "value"
+                  )
+                  return (
+                    <TableRow
+                      key={row?.id}
+                      sx={{
+                        "&:last-child td, &:last-child th": { border: 0 },
+                        cursor: "pointer",
+                        "&:hover": { backgroundColor: "#def6fa" },
+                      }}
+                      onClick={() =>
+                        navigate(`/manage-order/detail/${row?.id}`, {
+                          state: { order: row },
+                        })
+                      }
+                    >
+                      <TableCell>{index + 1}</TableCell>
+                      <TableCell>{row?.recipientName}</TableCell>
+                      <TableCell>{row?.recipientPhone}</TableCell>
+                      <TableCell>{row?.recipientAddress}</TableCell>
+                      <TableCell>{row?.itemQuantity}</TableCell>
+                      <TableCell>{row?.totalAmount}</TableCell>
+                      <TableCell>{row?.paymentMethod}</TableCell>
+                      <TableCell>
+                        <Button variant="text" color={status?.color}>
+                          {status?.label}
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  )
+                })
+              )}
             </TableBody>
           </Table>
         </TableContainer>

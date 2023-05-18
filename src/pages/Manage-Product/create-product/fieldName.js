@@ -42,7 +42,8 @@ export const PRODUCT_FIELD_NAME = {
     BRAND: {
         ID: 'brandId',
     },
-    IMAGES: 'images'
+    IMAGES: 'images',
+    THUMBNAIL: 'thumbnail',
 
 }
 

@@ -40,6 +40,7 @@ import { array } from "yup"
 import { mapCreateData } from "utils/Ultilities"
 import { CleaningServices } from "@mui/icons-material"
 import { isEmpty } from "lodash"
+import { InputUploadMultiple } from "components/InputUpload/InputUploadMultiple"
 
 const PFN = PRODUCT_FIELD_NAME
 
@@ -49,14 +50,8 @@ const ProductForm = () => {
   const [isUpdate, setIsUpdate] = useState(false)
   const [brandList, setBrandList] = useState([])
   const [modelList, setModelList] = useState([])
-  const [image, setImage] = useState([
-    {
-      imageName: "",
-      imageLink: "",
-      fileType: 0,
-      productId: null,
-    },
-  ])
+  const [image, setImage] = useState([])
+  const [thumbnail, setThumbnail] = useState("")
   const [isCreate, setIsCreate] = useState(false)
   const dispatch = useDispatch()
   const methods = useForm({
@@ -69,6 +64,7 @@ const ProductForm = () => {
     watch,
     setValue,
     trigger,
+    reset,
     formState: { errors },
   } = methods
 
@@ -159,7 +155,61 @@ const ProductForm = () => {
     })
   }, [watch(PFN.MODEL_SERIES), modelList])
 
-  const onChangeFile = (field, file, cb) => {
+  const onChangeFileDetail = async (field, file, cb) => {
+    console.log({ file })
+    cb(file)
+    if (!isEmpty(file)) {
+      if (file?.length < image?.length) {
+        let idx = 0
+        image?.forEach((img, index) => {
+          if (file?.every((item) => item?.name != img?.imageName)) {
+            idx = index
+          }
+        })
+        const newImage = [...image]
+        newImage.splice(idx, 1)
+        setImage(newImage)
+        return
+      }
+      file?.forEach((item, index) => {
+        if (image?.every((img) => img?.imageName != file?.name)) {
+          dispatch(
+            ManageActions.getImageLinkRequest({
+              params: {
+                numberLink: 1,
+              },
+              callback: async (res) => {
+                const urlObject = res?.[0]
+                const blob = new Blob([item], { type: item?.type })
+                if (urlObject?.urlUpload && urlObject?.urlFile) {
+                  setImage([
+                    ...image,
+                    {
+                      imageName: item.name,
+                      imageLink: urlObject?.urlFile,
+                      fileType: 2,
+                      productId: null,
+                    },
+                  ])
+                  uploadRequest.fetch(
+                    urlObject?.urlUpload,
+                    {
+                      data: blob,
+                    },
+                    item?.type
+                  )
+                }
+              },
+            })
+          )
+        }
+      })
+    } else {
+      setImage([])
+    }
+  }
+
+  const onChangeFileThumbnail = (field, file, cb) => {
     fileListRef.current[field] = file
     cb(file?.name)
     if (file) {
@@ -172,14 +222,7 @@ const ProductForm = () => {
             const urlObject = res?.[0]
             const blob = new Blob([file], { type: file?.type })
             if (urlObject?.urlUpload && urlObject?.urlFile) {
-              setImage([
-                {
-                  imageName: file.name,
-                  imageLink: urlObject?.urlFile,
-                  fileType: 1,
-                  productId: null,
-                },
-              ])
+              setThumbnail(urlObject?.urlFile)
               uploadRequest.fetch(
                 urlObject?.urlUpload,
                 {
@@ -191,12 +234,14 @@ const ProductForm = () => {
           },
         })
       )
+    } else {
+      setThumbnail(null)
     }
   }
 
   const handleCreateNewProduct = () => {
     const formValue = getValues()
-    const data = mapCreateData(formValue, image)
+    const data = mapCreateData(formValue, thumbnail, image)
     console.log({ data })
     dispatch(
       ManageActions.createProductRequest({
@@ -204,6 +249,7 @@ const ProductForm = () => {
         callback: (isSuccess) => {
           if (isSuccess) {
             navigate(ROUTE_PATH.MANAGE_PRODUCT)
+            reset()
           } else {
             alert("Tạo mới không thành công!")
           }
@@ -214,7 +260,7 @@ const ProductForm = () => {
 
   const handleUpdateProduct = () => {
     const formValue = getValues()
-    const data = mapCreateData(formValue, image)
+    const data = mapCreateData(formValue, thumbnail, image)
     console.log({ data })
     dispatch(
       ManageActions.updateProductRequest({
@@ -222,6 +268,7 @@ const ProductForm = () => {
         callback: (isSuccess) => {
           if (isSuccess) {
             navigate(ROUTE_PATH.MANAGE_PRODUCT)
+            reset()
           } else {
             alert("Cập nhật không thành công!")
           }
@@ -373,6 +420,34 @@ const ProductForm = () => {
               paddingRight="0"
             >
               <Controller
+                name={PFN.THUMBNAIL}
+                control={control}
+                render={({ field: { value, onChange } }) => (
+                  <InputUpload
+                    placeholder="Tải ảnh sản phẩm"
+                    value={value}
+                    // disabled={watchType !== COURSE_TYPE.OFFER}
+                    onChange={(file) =>
+                      onChangeFileThumbnail(PFN.THUMBNAIL, file, onChange)
+                    }
+                    re
+                    maxSize={MAX_SIZE_IMAGE}
+                    accept={IMAGE_ACCEPT}
+                  />
+                )}
+              />
+            </FormControl>
+          </Box>
+        </FlexRow>
+        <FlexRow>
+          <Box width={"100%"}>
+            <FormControl
+              label="Tải ảnh chi tiết"
+              required
+              paddingLeft="0"
+              paddingRight="0"
+            >
+              <Controller
                 name={PFN.IMAGES}
                 control={control}
                 render={({ field: { value, onChange } }) => (
@@ -380,8 +455,9 @@ const ProductForm = () => {
                     placeholder="Tải ảnh"
                     value={value}
                     // disabled={watchType !== COURSE_TYPE.OFFER}
+                    multiple={true}
                     onChange={(file) =>
-                      onChangeFile(PFN.IMAGES, file, onChange)
+                      onChangeFileDetail(PFN.IMAGES, file, onChange)
                     }
                     maxSize={MAX_SIZE_IMAGE}
                     accept={IMAGE_ACCEPT}

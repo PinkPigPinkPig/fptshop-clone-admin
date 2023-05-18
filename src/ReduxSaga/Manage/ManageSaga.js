@@ -163,11 +163,12 @@ function* handleDeleteProduct(action) {
 }
 
 function* handleGetOrder(action) {
-  const { data, callback } = action.payload
+  const { params, data, callback } = action.payload
   try {
     const api = () =>
       ApiUtil.fetch(ApiConfig.GET_ORDER, {
         method: "POST",
+        params,
         data,
       })
     const response = yield call(api)

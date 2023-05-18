@@ -206,13 +206,14 @@ const AccountForm = () => {
             </FormControl>
           </Box>
           <Box width={"50%"}>
-            <FormControl label="Mật khẩu" required paddingRight="0">
+            <FormControl label="Mật khẩu" required paddingRight="0" disabled={isUpdate}>
               <TextField
                 size="small"
                 hiddenLabel
                 {...register("password")}
                 autoFocus={true}
                 placeholder="Nhập mật khẩu"
+                disabled={isUpdate}
               />
             </FormControl>
           </Box>

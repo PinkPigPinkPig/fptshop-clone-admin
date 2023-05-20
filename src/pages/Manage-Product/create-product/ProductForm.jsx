@@ -93,9 +93,11 @@ const ProductForm = () => {
       setValue(PFN.TOTAL_PRODUCT, product?.[PFN.TOTAL_PRODUCT])
       setValue(
         PFN.IMAGES,
-        product?.images?.map((item) => ({ name: item?.imageName }))
+        product?.images?.map((item) => {
+          return { name: item?.imageName }
+        })
       )
-      setValue(PFN.THUMBNAIL, { name: product?.thumbnail?.imageName })
+      setValue(PFN.THUMBNAIL, product?.thumbnail?.imageName)
       setValue(PFN.SPECIFICATION.CPU, specification?.[PFN.SPECIFICATION.CPU])
       setValue(PFN.SPECIFICATION.CORE, specification?.[PFN.SPECIFICATION.CORE])
       setValue(

@@ -24,22 +24,17 @@ import jwtDecode from "jwt-decode"
 
 export const CommonLayout = ({ children }) => {
   const [user, setUser] = useState({
-    email: "admin@gmail.com",
-    username: "selling",
+    email: "abc@gmail.com",
+    username: "abc",
   })
 
+  const token = localStorageHelper.getItem(LOCAL_STORE.TOKEN)
   useEffect(() => {
-     const token = localStorageHelper.getItem(LOCAL_STORE.TOKEN)
     if (token) {
       const { email, username } = jwtDecode(token)
-      if (email) {
-        setUser({ ...user, email: email })
-      }
-      if (username) {
-        setUser({ ...user, username: username })
-      }
+      setUser({ username: username, email: email })
     }
-  }, [])
+  }, [token])
   const { pathname } = useLocation()
   const navigate = useNavigate()
   const [currentId, setCurrentId] = useState()
@@ -80,7 +75,7 @@ export const CommonLayout = ({ children }) => {
                       sx={{ display: "flex", gap: "8px" }}
                     >
                       <Avatar
-                        alt={user?.username || 'a'}
+                        alt={user?.username || "a"}
                         src={user?.avatarUrl ?? "/static/images/avatar/2.jpg"}
                       />
 

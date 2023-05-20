@@ -34,22 +34,18 @@ const settings = [
 ]
 const Header = () => {
   const [user, setUser] = useState({
-    email: "admin@gmail.com",
-    username: "selling",
+    email: "abc@gmail.com",
+    username: "abc",
   })
 
+  const token = localStorageHelper.getItem(LOCAL_STORE.TOKEN)
+
   useEffect(() => {
-    const token = localStorageHelper.getItem(LOCAL_STORE.TOKEN)
     if (token) {
       const { email, username } = jwtDecode(token)
-      if (email) {
-        setUser({ ...user, email: email })
-      }
-      if (username) {
-        setUser({ ...user, username: username })
-      }
+      setUser({ username: username, email: email })
     }
-  }, [])
+  }, [token])
 
   const navigate = useNavigate()
   const [anchorElUser, setAnchorElUser] = React.useState(null)
@@ -83,7 +79,7 @@ const Header = () => {
                 <span>{user?.username}</span>
                 <IconButton sx={{ p: 0, marginLeft: "1rem" }}>
                   <Avatar
-                    alt={user?.username || 'a'}
+                    alt={user?.username || "a"}
                     src={user?.username ?? "/static/images/avatar/2.jpg"}
                   />
                 </IconButton>

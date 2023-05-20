@@ -9,30 +9,48 @@ import {
   Typography,
 } from "@mui/material"
 import { Container } from "@mui/system"
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { ReactComponent as HomepageLogo } from "../../assets/icon/homepage-logo.svg"
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { ROUTE_PATH } from "constant/routes.const"
 import { localStorageHelper } from "helpers"
 import { LOCAL_STORE } from "constant/system.const"
 import logo from "../../assets/icon/logo.png"
+import { AuthSelector } from "ReduxSaga/Auth/AuthRedux"
+import jwtDecode from "jwt-decode"
 
 const settings = [
-  {
-    key: "profile",
-    name: "Thông tin cá nhân",
-    path: "/profile",
-  },
+  // {
+  //   key: "profile",
+  //   name: "Thông tin cá nhân",
+  //   path: "/profile",
+  // },
   {
     key: "Logout",
     name: "Đăng xuất",
   },
 ]
 const Header = () => {
-  const user = {}
-  // const dispatch = useDispatch();
+  const [user, setUser] = useState({
+    email: "admin@gmail.com",
+    username: "selling",
+  })
+
+  useEffect(() => {
+    const token = localStorageHelper.getItem(LOCAL_STORE.TOKEN)
+    if (token) {
+      const { email, username } = jwtDecode(token)
+      if (email) {
+        setUser({ ...user, email: email })
+      }
+      if (username) {
+        setUser({ ...user, username: username })
+      }
+    }
+  }, [])
+
   const navigate = useNavigate()
   const [anchorElUser, setAnchorElUser] = React.useState(null)
   const handleOpenUserMenu = (event) => {
@@ -62,11 +80,11 @@ const Header = () => {
             </Box>
             <div>
               <div className="d-flex align-items-center">
-                <span>{user.username}</span>
+                <span>{user?.username}</span>
                 <IconButton sx={{ p: 0, marginLeft: "1rem" }}>
                   <Avatar
-                    alt="profile"
-                    src={user.avatarUrl ?? "/static/images/avatar/2.jpg"}
+                    alt={user?.username || 'a'}
+                    src={user?.username ?? "/static/images/avatar/2.jpg"}
                   />
                 </IconButton>
                 <IconButton onClick={handleOpenUserMenu}>

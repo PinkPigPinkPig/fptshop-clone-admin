@@ -36,9 +36,9 @@ export function InputUploadMultiple({
         const newFiles = [...value, ...fileList];
         onChange(newFiles);
       } else {
-        toast.error(
-          'Ảnh/video vượt quá dung lượng tối đa hoặc sai định dạng. Xin vui lòng kiểm tra lại'
-        );
+        // toast.error(
+        //   'Ảnh/video vượt quá dung lượng tối đa hoặc sai định dạng. Xin vui lòng kiểm tra lại'
+        // );
       }
     }
   };

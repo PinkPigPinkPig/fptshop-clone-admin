@@ -12,14 +12,12 @@ function PrivateOutlet() {
     try {
       const { exp } = jwtDecode(token)
       const expirationTime = (exp * 1000) - 60000
-      console.log({exp, expirationTime})
       return Date.now() > expirationTime
     } catch (error) {
       console.error("Error decoding token:", error)
       return true // Assuming the token is expired if there's an error
     }
   }
-  console.log(isTokenExpired())
   return !isTokenExpired() ? (
     <Outlet />
   ) : (

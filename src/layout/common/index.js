@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState } from "react"
+import React, { useEffect, useLayoutEffect, useState } from "react"
 import SearchIcon from "@mui/icons-material/Search"
 import Breadcrumb from "../Breadcrumb"
 import { Footer } from "../Footer/Footer"
@@ -18,40 +18,54 @@ import "./layout.scss"
 import { FlexCol } from "../../components/Layout/Layout"
 import { listSidebarItems } from "../../constant/sidebarItem.const"
 import { useLocation, useNavigate } from "react-router-dom"
+import { localStorageHelper } from "helpers"
+import { LOCAL_STORE } from "constant/system.const"
+import jwtDecode from "jwt-decode"
 
 export const CommonLayout = ({ children }) => {
-  const handleSearchMenu = (event) => {
-    // dispatch(setListMenu(event.target.value.trim()))
-  }
+  const [user, setUser] = useState({
+    email: "admin@gmail.com",
+    username: "selling",
+  })
+
+  useEffect(() => {
+     const token = localStorageHelper.getItem(LOCAL_STORE.TOKEN)
+    if (token) {
+      const { email, username } = jwtDecode(token)
+      if (email) {
+        setUser({ ...user, email: email })
+      }
+      if (username) {
+        setUser({ ...user, username: username })
+      }
+    }
+  }, [])
   const { pathname } = useLocation()
   const navigate = useNavigate()
   const [currentId, setCurrentId] = useState()
-  const user = {}
 
   const handleClick = (parent, item) => {
     setCurrentId(parent.id)
     navigate(parent.path)
   }
   return (
-    <div className='wrap-layout'>
+    <div className="wrap-layout">
       <Header />
-      <Container maxWidth='xl'>
-        <div className='my-2'>
-          {/* <Breadcrumb /> */}
-        </div>
+      <Container maxWidth="xl">
+        <div className="my-2">{/* <Breadcrumb /> */}</div>
         {/* <Box className="common-layout-wrapper">{children}</Box> */}
-        <Box className='common-layout-wrapper'>
+        <Box className="common-layout-wrapper">
           <Grid container spacing={3}>
             <Grid item xs={3}>
-              <div className='sidebar'>
+              <div className="sidebar">
                 <List
                   sx={{
                     width: "100%",
                     bgcolor: "background.paper",
                     borderRadius: "10px",
                   }}
-                  component='nav'
-                  aria-labelledby='nested-list-subheader'
+                  component="nav"
+                  aria-labelledby="nested-list-subheader"
                 >
                   <Box
                     sx={{
@@ -62,20 +76,20 @@ export const CommonLayout = ({ children }) => {
                     }}
                   >
                     <Box
-                      className='account-name'
+                      className="account-name"
                       sx={{ display: "flex", gap: "8px" }}
                     >
                       <Avatar
-                        alt='profile'
-                        src={user.avatarUrl ?? "/static/images/avatar/2.jpg"}
+                        alt={user?.username || 'a'}
+                        src={user?.avatarUrl ?? "/static/images/avatar/2.jpg"}
                       />
 
                       <Box
-                        className='name'
+                        className="name"
                         sx={{ display: "flex", flexDirection: "column" }}
                       >
-                        <span>SmartThings</span>
-                        <span>Admin@SmartThings.com</span>
+                        <span>{user?.username}</span>
+                        <span>{user?.email}</span>
                       </Box>
                     </Box>
                     {/* <TextField
@@ -109,7 +123,7 @@ export const CommonLayout = ({ children }) => {
             </Grid>
 
             <Grid item xs={9}>
-              <div className='content'>{children}</div>
+              <div className="content">{children}</div>
             </Grid>
           </Grid>
         </Box>

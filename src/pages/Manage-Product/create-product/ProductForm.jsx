@@ -91,8 +91,11 @@ const ProductForm = () => {
       setValue(PFN.DESCRIPTION, product?.[PFN.DESCRIPTION])
       setValue(PFN.PRICE, product?.[PFN.PRICE])
       setValue(PFN.TOTAL_PRODUCT, product?.[PFN.TOTAL_PRODUCT])
-      setImage(product?.images, product?.images?.[0]?.imageName)
-      setValue(PFN.IMAGES)
+      setValue(
+        PFN.IMAGES,
+        product?.images?.map((item) => ({ name: item?.imageName }))
+      )
+      setValue(PFN.THUMBNAIL, { name: product?.thumbnail?.imageName })
       setValue(PFN.SPECIFICATION.CPU, specification?.[PFN.SPECIFICATION.CPU])
       setValue(PFN.SPECIFICATION.CORE, specification?.[PFN.SPECIFICATION.CORE])
       setValue(
@@ -113,8 +116,13 @@ const ProductForm = () => {
         PFN.SPECIFICATION.RESOLUTION,
         specification?.[PFN.SPECIFICATION.RESOLUTION]
       )
+
+      setThumbnail(product?.thumbnail)
+      setImage(product?.images)
     }
-  }, [location, brandList, modelList])
+  }, [location, brandList])
+
+  console.log({ thumbnail, image })
 
   useEffect(() => {
     if (categoryId) {
@@ -145,15 +153,6 @@ const ProductForm = () => {
       }
     })
   }, [watch(PFN.BRAND.ID)])
-
-  useEffect(() => {
-    const modelSeries = getValues()?.[PFN.MODEL_SERIES]
-    modelList?.forEach((item) => {
-      if (item?.modelSeries == modelSeries) {
-        setValue(PFN.PRODUCT_CODE, item?.[PFN.PRODUCT_CODE])
-      }
-    })
-  }, [watch(PFN.MODEL_SERIES), modelList])
 
   const onChangeFileDetail = async (field, file, cb) => {
     console.log({ file })
@@ -222,7 +221,10 @@ const ProductForm = () => {
             const urlObject = res?.[0]
             const blob = new Blob([file], { type: file?.type })
             if (urlObject?.urlUpload && urlObject?.urlFile) {
-              setThumbnail(urlObject?.urlFile)
+              setThumbnail({
+                imageLink: urlObject?.urlFile,
+                imageName: file?.name,
+              })
               uploadRequest.fetch(
                 urlObject?.urlUpload,
                 {
@@ -305,16 +307,11 @@ const ProductForm = () => {
             </FormControl>
           </Box>
           <Box width={"50%"}>
-            <FormControl
-              label="Model Series"
-              required
-              paddingRight="0"
-            >
+            <FormControl label="Model Series" required paddingRight="0">
               <TextField
                 size="small"
                 hiddenLabel
                 {...register(PFN.MODEL_SERIES)}
-                autoFocus={true}
                 placeholder="Nhập tên model"
               />
             </FormControl>
@@ -333,13 +330,13 @@ const ProductForm = () => {
             </FormControl>
           </Box>
           <Box width={"50%"}>
-            <FormControl label="Mô tả sản phẩm" required paddingRight="0">
+            <FormControl label="Số lượng" required paddingRight="0">
               <TextField
                 size="small"
                 hiddenLabel
-                {...register(PFN.DESCRIPTION)}
+                {...register(PFN.TOTAL_PRODUCT)}
                 autoFocus={true}
-                placeholder="Nhập mô tả"
+                placeholder="Nhập số lượng sản phẩm"
                 //   inputProps={{
                 //     maxLength: MAX_LENGTH.name
                 //   }}
@@ -361,6 +358,7 @@ const ProductForm = () => {
                 {...register(PFN.PRICE)}
                 autoFocus={true}
                 placeholder="Nhập giá sản phẩm"
+
                 //   inputProps={{
                 //     maxLength: MAX_LENGTH.name
                 //   }}
@@ -372,14 +370,23 @@ const ProductForm = () => {
               </TextHelper> */}
             </FormControl>
           </Box>
-          <Box width={"50%"}>
-            <FormControl label="Số lượng" required paddingRight="0">
+        </FlexRow>
+        <FlexRow>
+          <Box width={"100%"}>
+            <FormControl
+              label="Mô tả sản phẩm"
+              required
+              paddingLeft="0"
+              paddingRight="0"
+            >
               <TextField
                 size="small"
                 hiddenLabel
-                {...register(PFN.TOTAL_PRODUCT)}
+                {...register(PFN.DESCRIPTION)}
                 autoFocus={true}
-                placeholder="Nhập số lượng sản phẩm"
+                placeholder="Nhập mô tả"
+                multiline
+                rows={4}
                 //   inputProps={{
                 //     maxLength: MAX_LENGTH.name
                 //   }}
@@ -411,9 +418,8 @@ const ProductForm = () => {
                     onChange={(file) =>
                       onChangeFileThumbnail(PFN.THUMBNAIL, file, onChange)
                     }
-                    re
-                    maxSize={MAX_SIZE_IMAGE}
-                    accept={IMAGE_ACCEPT}
+                    // maxSize={MAX_SIZE_IMAGE}
+                    // accept={IMAGE_ACCEPT}
                   />
                 )}
               />
@@ -435,13 +441,12 @@ const ProductForm = () => {
                   <InputUpload
                     placeholder="Tải ảnh"
                     value={value}
-                    // disabled={watchType !== COURSE_TYPE.OFFER}
                     multiple={true}
                     onChange={(file) =>
                       onChangeFileDetail(PFN.IMAGES, file, onChange)
                     }
-                    maxSize={MAX_SIZE_IMAGE}
-                    accept={IMAGE_ACCEPT}
+                    // maxSize={MAX_SIZE_IMAGE}
+                    // accept={IMAGE_ACCEPT}
                   />
                 )}
               />

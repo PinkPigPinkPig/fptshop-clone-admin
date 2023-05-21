@@ -17,6 +17,7 @@ import {
   TablePagination,
   TableRow,
   Typography,
+  Tooltip,
 } from "@mui/material"
 import { DataGrid } from "@mui/x-data-grid"
 import React, { useCallback, useEffect, useState } from "react"
@@ -184,9 +185,7 @@ const ManageProduct = () => {
                 <StyledTableCell style={{ minWidth: 300 }} width={500}>
                   Mô tả
                 </StyledTableCell>
-                <StyledTableCell sx={sticky(0)}>
-                  Action
-                </StyledTableCell>
+                <StyledTableCell sx={sticky(0)}>Action</StyledTableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -214,7 +213,15 @@ const ManageProduct = () => {
                     <StyledTableCell>
                       {row?.[PFN.TOTAL_PRODUCT]}
                     </StyledTableCell>
-                    <StyledTableCell>{row?.[PFN.DESCRIPTION]}</StyledTableCell>
+                    <StyledTableCell>
+                      <Tooltip title={row?.description || "Mô tả sản phẩm"}>
+                        <p>
+                          {row?.description?.length > 30
+                            ? row?.description.substring(0, 30 - 3) + "..."
+                            : row?.description}
+                        </p>
+                      </Tooltip>
+                    </StyledTableCell>
                     <StyledTableCell sx={sticky(index)}>
                       <Stack direction="row" spacing={2}>
                         <Link

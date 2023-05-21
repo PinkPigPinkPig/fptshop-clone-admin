@@ -84,7 +84,9 @@ export const CommonLayout = ({ children }) => {
                         sx={{ display: "flex", flexDirection: "column" }}
                       >
                         <span>{user?.username}</span>
-                        <span>{user?.email}</span>
+                        <span>
+                          {user?.email || `${user?.username}@gmail.com`}
+                        </span>
                       </Box>
                     </Box>
                     {/* <TextField

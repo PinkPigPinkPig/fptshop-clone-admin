@@ -1,52 +1,58 @@
-import React from 'react';
-import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import { Link, styled } from '@mui/material';
-import Collapse from '@mui/material/Collapse';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
-import { Link as RouterLink } from 'react-router-dom';
-import './layout.scss';
-import CircleIcon from '@mui/icons-material/Circle';
-import { FlexCol } from '../../components/Layout/Layout';
+import React from "react"
+import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight"
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp"
+import { Link, styled } from "@mui/material"
+import Collapse from "@mui/material/Collapse"
+import ListItemButton from "@mui/material/ListItemButton"
+import ListItemText from "@mui/material/ListItemText"
+import { Link as RouterLink } from "react-router-dom"
+import "./layout.scss"
+import CircleIcon from "@mui/icons-material/Circle"
+import { FlexCol } from "../../components/Layout/Layout"
 // import { useAppSelector } from 'store/configureStore';
 
 const ListItemButtonChip = styled(ListItemButton)({
   borderRadius: 4,
-  padding: '5px 10px'
-});
+  padding: "5px 10px",
+})
 
 const HeadItem = ({ onClick, item, isActive, ...props }) => {
   return (
     <ListItemButtonChip
       onClick={() => onClick(item)}
       sx={{
-        background: isActive ? '#565771' : '#fff',
-        color: isActive ? '#fff' : 'black',
-        ':hover': {
-          background: isActive ? '#565771' : '#fff',
-          color: isActive ? '#fff' : 'black'
-        }
+        background: isActive ? "#565771" : "#2196f3",
+        color: isActive ? "#fff" : "#fff",
+        ":hover": {
+          background: isActive ? "#565771" : "#2196f3",
+          color: isActive ? "#fff" : "#fff",
+        },
       }}
-      {...props}>
+      {...props}
+    >
       {!item.isOpen ? (
-        <KeyboardArrowRightIcon sx={{ width: '1rem', marginRight: '10px' }} />
+        <KeyboardArrowRightIcon sx={{ width: "1rem", marginRight: "10px" }} />
       ) : (
-        <KeyboardArrowUpIcon sx={{ width: '1rem', marginRight: '10px' }} />
+        <KeyboardArrowUpIcon sx={{ width: "1rem", marginRight: "10px" }} />
       )}
-      <ListItemText primary={item.title} sx={{ fontWeight: '500', fontSize: '14px' }} />
+      <ListItemText
+        primary={item.title}
+        sx={{ fontWeight: "500", fontSize: "14px" }}
+      />
     </ListItemButtonChip>
-  );
-};
+  )
+}
 
 export const MenuItem = ({ item, parent, onClick, currentId, level = 0 }) => {
-  const isParent = Boolean(item.subItems);
+  const isParent = Boolean(item.subItems)
   // const { activeChildId, activeParentId } = useAppSelector((state) => state.sidebar);
   const isActive = item.id === currentId
-  
+
   return (
     <>
-      {isParent && <HeadItem item={item} onClick={onClick} isActive={isActive} />}
+      {isParent && (
+        <HeadItem item={item} onClick={onClick} isActive={isActive} />
+      )}
       {isParent ? (
         <Collapse in={item.isOpen} timeout="auto" unmountOnExit>
           <FlexCol sx={{ gap: 0.5 }}>
@@ -59,7 +65,7 @@ export const MenuItem = ({ item, parent, onClick, currentId, level = 0 }) => {
                   onClick={onClick}
                   level={level + 1}
                 />
-              );
+              )
             })}
           </FlexCol>
         </Collapse>
@@ -69,24 +75,26 @@ export const MenuItem = ({ item, parent, onClick, currentId, level = 0 }) => {
           to={item.path}
           key={item.title}
           component={RouterLink}
-          sx={{ textDecoration: 'none' }}>
+          sx={{ textDecoration: "none" }}
+        >
           <ListItemButtonChip
             sx={{
-              background: isActive ? '#878787' : '#F5F5F5',
-              color: isActive ? '#fff' : 'black',
-              ':hover': {
-                background: isActive ? '#878787' : '#F5F5F5',
-                color: isActive ? '#fff' : 'black'
-              }
-            }}>
-            <CircleIcon sx={{ fontSize: 5, margin: '0 15px' }} />
+              background: isActive ? "#878787" : "#2196f3",
+              color: isActive ? "#fff" : "black",
+              ":hover": {
+                background: isActive ? "#878787" : "#2196f3",
+                color: isActive ? "#fff" : "black",
+              },
+            }}
+          >
+            <CircleIcon sx={{ fontSize: 5, margin: "0 15px" }} />
             <ListItemText primary={item.title} />
           </ListItemButtonChip>
         </Link>
       )}
     </>
-  );
-};
+  )
+}
 
 // export default function MenuItem({ handleClick, item }) {
 //   const { pathname } = useLocation();

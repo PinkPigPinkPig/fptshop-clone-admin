@@ -12,11 +12,14 @@ import {
   TableRow,
   TableCell,
   TableBody,
+  styled,
+  tableCellClasses,
 } from "@mui/material"
 import { DataGrid } from "@mui/x-data-grid"
 import { ManageActions } from "ReduxSaga/Manage/ManageRedux"
 import { ROUTE_PATH } from "constant/routes.const"
 import { isEmpty, sortBy } from "lodash"
+import { useStyles } from "pages/Manage-Product/ManageProduct"
 import React from "react"
 import { useEffect } from "react"
 import { useState } from "react"
@@ -135,6 +138,7 @@ const ManageAccount = () => {
       },
     },
     {
+      class: sticky(0),
       field: "action",
       headerName: "Action",
       sortable: false,
@@ -202,30 +206,31 @@ const ManageAccount = () => {
                   </TableRow>
                 ) : (
                   COLUMNS?.map((column) => (
-                    <TableCell
+                    <StyledTableCell
                       key={column?.field}
                       style={{ minWidth: column?.width }}
+                      sx={column?.class || {}}
                     >
                       {column?.headerName}
-                    </TableCell>
+                    </StyledTableCell>
                   ))
                 )}
               </TableRow>
             </TableHead>
             <TableBody>
               {tableData?.content?.map((row, index) => (
-                <TableRow
+                <StyledTableRow
                   key={row?.id}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
-                  <TableCell>{index + 1}</TableCell>
-                  <TableCell>{row?.fullName}</TableCell>
-                  <TableCell>{row?.dob?.join('-')}</TableCell>
-                  <TableCell>{row?.email}</TableCell>
-                  <TableCell>{row?.phoneNumber}</TableCell>
-                  <TableCell>{row?.username}</TableCell>
-                  <TableCell>{row?.password}</TableCell>
-                  <TableCell>
+                  <StyledTableCell>{index + 1}</StyledTableCell>
+                  <StyledTableCell>{row?.fullName}</StyledTableCell>
+                  <StyledTableCell>{row?.dob?.join("-")}</StyledTableCell>
+                  <StyledTableCell>{row?.email}</StyledTableCell>
+                  <StyledTableCell>{row?.phoneNumber}</StyledTableCell>
+                  <StyledTableCell>{row?.username}</StyledTableCell>
+                  <StyledTableCell>{row?.password}</StyledTableCell>
+                  <StyledTableCell sx={sticky(index)}>
                     <Stack direction="row" spacing={2}>
                       <Link
                         to={`/manage-account/update-account/${row?.username}`}
@@ -242,8 +247,8 @@ const ManageAccount = () => {
                         Delete
                       </Link>
                     </Stack>
-                  </TableCell>
-                </TableRow>
+                  </StyledTableCell>
+                </StyledTableRow>
               ))}
             </TableBody>
           </Table>
@@ -319,3 +324,30 @@ const style = {
   boxShadow: 24,
   p: 4,
 }
+
+const sticky = (index) => ({
+  position: "sticky",
+  right: 0,
+  backgroundColor: index % 2 != 0 ? "#fff" : "#eeeeee",
+})
+
+export const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: theme.palette.primary.light,
+    color: theme.palette.common.white,
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+    overflow: "hidden",
+  },
+}))
+
+export const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  "&:nth-of-type(odd)": {
+    backgroundColor: theme.palette.action.hover,
+  },
+  // hide last border
+  "&:last-child td, &:last-child th": {
+    border: 0,
+  },
+}))

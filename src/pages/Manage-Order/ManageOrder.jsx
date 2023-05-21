@@ -24,6 +24,7 @@ import { findItemInOptions } from "utils/Ultilities"
 import { PAYMENT_METHOD_LOV } from "constant/system.const"
 import { useNavigate } from "react-router-dom"
 import { isEmpty } from "lodash"
+import { StyledTableCell, StyledTableRow } from "pages/Manage-Account/ManageAccount"
 
 const ManageOrder = () => {
   const [orderStatus, setOrderStatus] = useState()
@@ -185,12 +186,12 @@ const ManageOrder = () => {
             <TableHead>
               <TableRow>
                 {COLUMNS?.map((column) => (
-                  <TableCell
+                  <StyledTableCell
                     key={column?.field}
                     style={{ minWidth: column?.width }}
                   >
                     {column?.headerName}
-                  </TableCell>
+                  </StyledTableCell>
                 ))}
               </TableRow>
             </TableHead>
@@ -211,7 +212,7 @@ const ManageOrder = () => {
                     "value"
                   )
                   return (
-                    <TableRow
+                    <StyledTableRow
                       key={row?.id}
                       sx={{
                         "&:last-child td, &:last-child th": { border: 0 },
@@ -224,19 +225,19 @@ const ManageOrder = () => {
                         })
                       }
                     >
-                      <TableCell>{index + 1}</TableCell>
-                      <TableCell>{row?.recipientName}</TableCell>
-                      <TableCell>{row?.recipientPhone}</TableCell>
-                      <TableCell>{row?.recipientAddress}</TableCell>
-                      <TableCell>{row?.itemQuantity}</TableCell>
-                      <TableCell>{row?.totalAmount}</TableCell>
-                      <TableCell>{findItemInOptions(row?.paymentMethod, PAYMENT_METHOD_LOV, 'value')?.label}</TableCell>
-                      <TableCell>
+                      <StyledTableCell>{index + 1}</StyledTableCell>
+                      <StyledTableCell>{row?.recipientName}</StyledTableCell>
+                      <StyledTableCell>{row?.recipientPhone}</StyledTableCell>
+                      <StyledTableCell>{row?.recipientAddress}</StyledTableCell>
+                      <StyledTableCell>{row?.itemQuantity}</StyledTableCell>
+                      <StyledTableCell>{row?.totalAmount}</StyledTableCell>
+                      <StyledTableCell>{findItemInOptions(row?.paymentMethod, PAYMENT_METHOD_LOV, 'value')?.label}</StyledTableCell>
+                      <StyledTableCell>
                         <Button variant="text" color={status?.color}>
                           {status?.label}
                         </Button>
-                      </TableCell>
-                    </TableRow>
+                      </StyledTableCell>
+                    </StyledTableRow>
                   )
                 })
               )}

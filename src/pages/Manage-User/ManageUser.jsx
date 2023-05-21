@@ -13,6 +13,7 @@ import {
 import { DataGrid } from "@mui/x-data-grid"
 import { ManageActions } from "ReduxSaga/Manage/ManageRedux"
 import { isEmpty, sortBy } from "lodash"
+import { StyledTableCell, StyledTableRow } from "pages/Manage-Account/ManageAccount"
 import React, { useEffect } from "react"
 import { useState } from "react"
 import { useDispatch } from "react-redux"
@@ -126,12 +127,12 @@ const ManageUser = () => {
             <TableHead>
               <TableRow>
                 {COLUMNS?.map((column) => (
-                  <TableCell
+                  <StyledTableCell
                     key={column?.field}
                     style={{ minWidth: column?.width }}
                   >
                     {column?.headerName}
-                  </TableCell>
+                  </StyledTableCell>
                 ))}
               </TableRow>
             </TableHead>
@@ -146,7 +147,7 @@ const ManageUser = () => {
                 </TableRow>
               ) : (
                 tableData?.content?.map((row, index) => (
-                  <TableRow
+                  <StyledTableRow
                     key={row?.id}
                     sx={{
                       "&:last-child td, &:last-child th": { border: 0 },
@@ -159,13 +160,13 @@ const ManageUser = () => {
                       })
                     }
                   >
-                    <TableCell>{index + 1}</TableCell>
-                    <TableCell>{row?.fullName}</TableCell>
-                    <TableCell>{row?.dob?.join('-')}</TableCell>
-                    <TableCell>{row?.email}</TableCell>
-                    <TableCell>{row?.phoneNumber}</TableCell>
-                    <TableCell>{row?.address}</TableCell>
-                  </TableRow>
+                    <StyledTableCell>{index + 1}</StyledTableCell>
+                    <StyledTableCell>{row?.fullName}</StyledTableCell>
+                    <StyledTableCell>{row?.dob?.join('-')}</StyledTableCell>
+                    <StyledTableCell>{row?.email}</StyledTableCell>
+                    <StyledTableCell>{row?.phoneNumber}</StyledTableCell>
+                    <StyledTableCell>{row?.address}</StyledTableCell>
+                  </StyledTableRow>
                 ))
               )}
             </TableBody>

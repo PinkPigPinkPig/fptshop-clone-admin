@@ -62,10 +62,10 @@ const Header = () => {
     localStorageHelper.removeItem(LOCAL_STORE.TOKEN)
   }
   return (
-    <Box sx={{ flexGrow: 1 }} className="header-container">
+    <Box sx={{ flexGrow: 1, backgroundColor: ' #2196f3' }} className="header-container">
       <AppBar
         position="static"
-        sx={{ backgroundColor: "#FFF", color: "#0A033C", boxShadow: "none" }}
+        sx={{ backgroundColor: "#2196f3", color: "#FFF", boxShadow: "none" }}
       >
         <Container maxWidth="xl">
           <Toolbar disableGutters>

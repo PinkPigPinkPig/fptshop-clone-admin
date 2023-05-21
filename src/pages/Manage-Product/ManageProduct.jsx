@@ -28,8 +28,19 @@ import { ROUTE_PATH } from "../../constant/routes.const"
 import { isEmpty, isNil } from "lodash"
 import { PRODUCT_FIELD_NAME } from "./create-product/fieldName"
 import { moneyConvert } from "utils/Ultilities"
+import {
+  StyledTableCell,
+  StyledTableRow,
+} from "pages/Manage-Account/ManageAccount"
+import { makeStyles } from "@mui/styles"
 
 const PFN = PRODUCT_FIELD_NAME
+
+const sticky = (index) => ({
+  position: "sticky",
+  right: 0,
+  backgroundColor: index % 2 != 0 ? "#fff" : "#eeeeee",
+})
 
 const ManageProduct = () => {
   const dispatch = useDispatch()
@@ -152,56 +163,59 @@ const ManageProduct = () => {
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell style={{ minWidth: 60 }} width={60}>
+                <StyledTableCell style={{ minWidth: 60 }} width={60}>
                   STT
-                </TableCell>
-                <TableCell style={{ minWidth: 250 }} width={250}>
+                </StyledTableCell>
+                <StyledTableCell style={{ minWidth: 250 }} width={250}>
                   Tên sản phẩm
-                </TableCell>
-                <TableCell style={{ minWidth: 150 }} width={150}>
+                </StyledTableCell>
+                <StyledTableCell style={{ minWidth: 150 }} width={150}>
                   Dòng sản phẩm
-                </TableCell>
-                <TableCell style={{ minWidth: 120 }} width={120}>
+                </StyledTableCell>
+                <StyledTableCell style={{ minWidth: 120 }} width={120}>
                   Nhãn hiệu
-                </TableCell>
-                <TableCell style={{ minWidth: 150 }} width={150}>
+                </StyledTableCell>
+                <StyledTableCell style={{ minWidth: 150 }} width={150}>
                   Giá tiền
-                </TableCell>
-                <TableCell style={{ minWidth: 150 }} width={150}>
+                </StyledTableCell>
+                <StyledTableCell style={{ minWidth: 150 }} width={150}>
                   Số lượng
-                </TableCell>
-                <TableCell style={{ minWidth: 300 }} width={500}>
+                </StyledTableCell>
+                <StyledTableCell style={{ minWidth: 300 }} width={500}>
                   Mô tả
-                </TableCell>
-                <TableCell fixed="right" sticky>
+                </StyledTableCell>
+                <StyledTableCell sx={sticky(0)}>
                   Action
-                </TableCell>
+                </StyledTableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {isEmpty(tableData?.content) ? (
                 <TableRow>
                   <TableCell align="center" colSpan={8}>
-                    <Box
-                    >
+                    <Box>
                       <Typography>Không có dữ liệu</Typography>
                     </Box>
                   </TableCell>
                 </TableRow>
               ) : (
                 tableData?.content?.map((row, index) => (
-                  <TableRow
+                  <StyledTableRow
                     key={row?.id}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
-                    <TableCell>{index + 1}</TableCell>
-                    <TableCell>{row?.[PFN.PRODUCT_NAME]}</TableCell>
-                    <TableCell>{row?.[PFN.MODEL_SERIES]}</TableCell>
-                    <TableCell>{row?.brand?.brandName}</TableCell>
-                    <TableCell>{moneyConvert(row?.[PFN.PRICE])}</TableCell>
-                    <TableCell>{row?.[PFN.TOTAL_PRODUCT]}</TableCell>
-                    <TableCell>{row?.[PFN.DESCRIPTION]}</TableCell>
-                    <TableCell>
+                    <StyledTableCell>{index + 1}</StyledTableCell>
+                    <StyledTableCell>{row?.[PFN.PRODUCT_NAME]}</StyledTableCell>
+                    <StyledTableCell>{row?.[PFN.MODEL_SERIES]}</StyledTableCell>
+                    <StyledTableCell>{row?.brand?.brandName}</StyledTableCell>
+                    <StyledTableCell>
+                      {moneyConvert(row?.[PFN.PRICE])}
+                    </StyledTableCell>
+                    <StyledTableCell>
+                      {row?.[PFN.TOTAL_PRODUCT]}
+                    </StyledTableCell>
+                    <StyledTableCell>{row?.[PFN.DESCRIPTION]}</StyledTableCell>
+                    <StyledTableCell sx={sticky(index)}>
                       <Stack direction="row" spacing={2}>
                         <Link
                           to={`/manage-product/update-product/${row?.id}`}
@@ -213,8 +227,8 @@ const ManageProduct = () => {
                           Delete
                         </Link>
                       </Stack>
-                    </TableCell>
-                  </TableRow>
+                    </StyledTableCell>
+                  </StyledTableRow>
                 ))
               )}
             </TableBody>

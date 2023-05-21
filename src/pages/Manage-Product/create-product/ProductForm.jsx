@@ -389,15 +389,10 @@ const ProductForm = () => {
                 placeholder="Nhập mô tả"
                 multiline
                 rows={4}
-                //   inputProps={{
-                //     maxLength: MAX_LENGTH.name
-                //   }}
-                // error={Boolean(errors?.[PFN.PRODUCT_NAME])}
-                // helperText={errors?.[PFN.PRODUCT_NAME]?.message}
               />
-              {/* <TextHelper>
-                {(watch(PFN.PRODUCT_NAME)?.length || 0) + "/" + 0}
-              </TextHelper> */}
+              <TextHelper>
+                {(watch(PFN.DESCRIPTION)?.length || 0) + " ký tự"}
+              </TextHelper>
             </FormControl>
           </Box>
         </FlexRow>

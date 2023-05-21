@@ -143,7 +143,7 @@ const AccountForm = () => {
                     formState,
                   }) => (
                     <DatePicker
-                      format="YYYY/MM/DD"
+                      format="DD/MM/YYYY"
                       slotProps={{
                         textField: {
                           size: "small",

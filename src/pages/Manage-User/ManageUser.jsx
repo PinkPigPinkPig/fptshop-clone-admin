@@ -12,6 +12,7 @@ import {
 } from "@mui/material"
 import { DataGrid } from "@mui/x-data-grid"
 import { ManageActions } from "ReduxSaga/Manage/ManageRedux"
+import dayjs from "dayjs"
 import { isEmpty, sortBy } from "lodash"
 import { StyledTableCell, StyledTableRow } from "pages/Manage-Account/ManageAccount"
 import React, { useEffect } from "react"
@@ -162,7 +163,7 @@ const ManageUser = () => {
                   >
                     <StyledTableCell>{index + 1}</StyledTableCell>
                     <StyledTableCell>{row?.fullName}</StyledTableCell>
-                    <StyledTableCell>{row?.dob?.join('-')}</StyledTableCell>
+                    <StyledTableCell>{dayjs(row?.dob?.join("/")).format('DD/MM/YYYY')}</StyledTableCell>
                     <StyledTableCell>{row?.email}</StyledTableCell>
                     <StyledTableCell>{row?.phoneNumber}</StyledTableCell>
                     <StyledTableCell>{row?.address}</StyledTableCell>
